@@ -63,10 +63,18 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.email.retrive') ? 'active' : '' }}"
+                href="{{ route('user.email.retrive') }}">
+                <i class="mdi mdi-email-search menu-icon"></i>
+                <span class="menu-title">EMAIL RETRIVE</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link {{ Route::is('user.bvn-phone-search') ? 'active' : '' }}"
                 href="{{ route('user.bvn-phone-search') }}">
-                <i class="mdi mdi-magnify menu-icon"></i>
-                <span class="menu-title">BVN Search</span>
+                <i class="mdi mdi-account-search menu-icon"></i>
+                <span class="menu-title">BVN RETRIVAL</span>
             </a>
         </li>
         <li class="nav-item">
@@ -166,6 +174,12 @@
                         <a class="nav-link {{ Route::is('admin.delink.services.list') ? 'active' : '' }}"
                             href="{{ route('admin.delink.services.list') }}">
                             <i class="mdi mdi-link-off menu-icon"></i> NIN Delink
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('admin.email.retrive.list') ? 'active' : '' }}"
+                            href="{{ route('admin.email.retrive.list') }}">
+                            <i class="mdi mdi-email-search menu-icon"></i> Email Retrive
                         </a>
                     </li>
                     <li class="nav-item">

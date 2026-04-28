@@ -122,6 +122,72 @@
             background-color: #1e3a8a;
             /* Darker blue on hover */
         }
+
+        /* Premium Service Cards Redesign */
+        .service-card {
+            border-radius: 1.25rem !important;
+            border: 1px solid rgba(0,0,0,0.03) !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            background: #ffffff;
+            height: 100%;
+        }
+        .service-card:hover {
+            transform: translateY(-5px) !important;
+            box-shadow: 0 15px 30px -5px rgba(30, 64, 175, 0.1), 0 10px 15px -5px rgba(0, 0, 0, 0.04) !important;
+            border-color: rgba(30, 64, 175, 0.15) !important;
+        }
+        .service-icon-wrapper {
+            width: 72px;
+            height: 72px;
+            background: #f8fafc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem auto;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.02);
+        }
+        .service-card:hover .service-icon-wrapper {
+            background: #eff6ff;
+            transform: scale(1.08);
+            box-shadow: 0 0 0 6px rgba(239, 246, 255, 0.5);
+        }
+        .service-icon-wrapper img {
+            max-width: 38px;
+            max-height: 38px;
+            object-fit: contain;
+            transition: all 0.3s ease;
+        }
+        .service-card-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 0;
+            line-height: 1.3;
+            transition: color 0.3s ease;
+        }
+        .service-card:hover .service-card-title {
+            color: #1e40af;
+        }
+        
+        @media (max-width: 576px) {
+            .service-icon-wrapper {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 0.75rem;
+            }
+            .service-icon-wrapper img {
+                max-width: 32px;
+                max-height: 32px;
+            }
+            .service-card-title {
+                font-size: 0.85rem;
+            }
+            .service-card {
+                padding: 1rem !important;
+            }
+        }
     </style>
 @endpush
 @section('content')
@@ -222,163 +288,126 @@
                 <div class="col-lg-12 col-12 col-md-6">
                     <div class="container py-3" style="max-width: 100%">
                         <h4 class="fw-light mb-4 text-center">Our Services</h4>
-                        <div class="row g-4">
+                        <div class="row g-3 g-md-4 justify-content-center">
 
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-                                            <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">Verify NIN</h5>
-                                        <a href="{{ route('user.verify-nin') }}" class="stretched-link"></a>
+                            <!-- Verify NIN -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">Verify NIN</h5>
+                                    <a href="{{ route('user.verify-nin') }}" class="stretched-link"></a>
                                 </div>
                             </div>
 
-
-                            <!-- Service 1 -->
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">Verify NIN Phone</h5>
-                                        <a href="{{ route('user.verify-nin-phone') }}" class="stretched-link"></a>
+                            <!-- Verify NIN Phone -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">Verify NIN Phone</h5>
+                                    <a href="{{ route('user.verify-nin-phone') }}" class="stretched-link"></a>
                                 </div>
                             </div>
 
-                              <!-- Service 1 -->
-                              <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">Verify NIN Demographic</h5>
-                                        <a href="{{ route('user.verify-demo') }}" class="stretched-link"></a>
+                            <!-- Verify NIN Demographic -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">Verify NIN Demographic</h5>
+                                    <a href="{{ route('user.verify-demo') }}" class="stretched-link"></a>
                                 </div>
                             </div>
 
-
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">IPE Clearance</h5>
-                                        <a href="{{ route('user.ipe') }}" class="stretched-link"></a>
+                            <!-- IPE Clearance -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">IPE Clearance</h5>
+                                    <a href="{{ route('user.ipe') }}" class="stretched-link"></a>
                                 </div>
                             </div>
 
-
-                            <!-- Service 2 -->
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/bvn.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">Verify BVN</h5>
-                                        <a href="{{ route('user.verify-bvn') }}" class="stretched-link"></a>
+                            <!-- Verify BVN -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
                                     </div>
+                                    <h5 class="service-card-title text-center">Verify BVN</h5>
+                                    <a href="{{ route('user.verify-bvn') }}" class="stretched-link"></a>
                                 </div>
                             </div>
 
-
-                             <!-- Service 2 -->
-                             <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/bvn.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">BVN By Phone Number</h5>
-                                        <a href="{{ route('user.bvn-phone-search') }}" class="stretched-link"></a>
+                             <!-- BVN RETRIVAL -->
+                             <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
                                     </div>
+                                    <h5 class="service-card-title text-center">BVN RETRIVAL</h5>
+                                    <a href="{{ route('user.bvn-phone-search') }}" class="stretched-link"></a>
                                 </div>
                             </div>
 
-
-
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">Personalize</h5>
-                                        <a href="{{ route('user.personalize-nin') }}" class="stretched-link"></a>
+                            <!-- Personalize -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">Personalize</h5>
+                                    <a href="{{ route('user.personalize-nin') }}" class="stretched-link"></a>
                                 </div>
                             </div>
 
-
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">Instant Validation</h5>
-                                        <a href="#" class="stretched-link"></a>
+                            <!-- Instant Validation -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">Instant Validation</h5>
+                                    <a href="#" class="stretched-link"></a>
                                 </div>
                             </div>
 
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">NIN Validation</h5>
-                                        <a href="{{ route('user.nin-validation')}}" class="stretched-link"></a>
+                            <!-- NIN Validation -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">NIN Validation</h5>
+                                    <a href="{{ route('user.nin-validation')}}" class="stretched-link"></a>
                                 </div>
                             </div>
-                            <div class="col-6 col-md-6 col-lg-4">
-                                <div class="card shadow-sm border-0 h-100">
-                                    <div class="card-body text-center p-3">
-                                        <div class="icon-box mb-3">
-
-                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="Logo"
-                                                    style="max-width: 100px; max-height: 100px;">
-
-                                        </div>
-                                        <h5 class="icon-box-title mb-0 fw-bold">NIN Delinking</h5>
-                                        <a href="{{ route('user.nin.delink')}}" class="stretched-link"></a>
+                            
+                            <!-- NIN Delinking -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
                                     </div>
+                                    <h5 class="service-card-title text-center">NIN Delinking</h5>
+                                    <a href="{{ route('user.nin.delink')}}" class="stretched-link"></a>
+                                </div>
+                            </div>
+
+                            <!-- Email Retrieval -->
+                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                <div class="card service-card position-relative p-4">
+                                    <div class="service-icon-wrapper">
+                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                    </div>
+                                    <h5 class="service-card-title text-center">Email Retrieval</h5>
+                                    <a href="{{ route('user.email.retrive')}}" class="stretched-link"></a>
                                 </div>
                             </div>
 

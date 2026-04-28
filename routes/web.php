@@ -19,8 +19,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
+    $settings = SiteSetting::first();
+    if ($settings && $settings->home_enabled) {
+        return view('welcome');
+    }
     return redirect()->route('auth.login');
-});
+})->name('welcome');
 
 
 Route::post('/monnify/webhook', [PaymentWebhookController::class, 'handleWebhook']);
@@ -143,6 +147,9 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             Route::get('/nin-delink', [ServicesController::class, 'ninDelink'])->name('nin.delink');
             Route::post('/nin-services/delink/request', [ServicesController::class, 'requestNinServiceDelink'])->name('nin.services.delink.request');
 
+            Route::get('/email-retrive', [ServicesController::class, 'emailRetrive'])->name('email.retrive');
+            Route::post('/email-retrive/request', [ServicesController::class, 'requestEmailRetrive'])->name('email.retrive.request');
+
 
             //Whatsapp API Support--------------------------------------------------------------------------
             Route::get('/support', function () {
@@ -192,5 +199,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'u
 
      // NIN Services
     Route::get('/delink-services', [ServicesController::class, 'delinkServicesList'])->name('delink.services.list');
+    Route::get('/email-retrive-services', [ServicesController::class, 'emailRetriveList'])->name('email.retrive.list');
 
 });

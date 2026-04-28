@@ -26,9 +26,9 @@ class DatabaseSeeder extends Seeder
 
 
         User::updateOrCreate(
-            ['email' => 'admin@agentportal.ng'],
+            ['email' => 'admin@expressportal.org'],
             [
-                'name' => 'Agent Portal',
+                'name' => 'Admin Expressportal',
                 'email_verified_at' => now(),
                 'password' => Hash::make('@passwd12345'),
                 'role' => 'super_admin',

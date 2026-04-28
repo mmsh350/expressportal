@@ -86,7 +86,7 @@
                                                 $serialNumber = ($currentPage - 1) * $perPage + 1;
                                             @endphp
                                             <div class="table-responsive">
-                                                <table class="table text-nowrap" style="background:#fafafc !important">
+                                                <table class="table" style="background:#fafafc !important">
                                                     <thead>
                                                         <tr class="table-primary">
                                                             <th width="5%" scope="col">ID</th>
@@ -101,9 +101,14 @@
                                                             <tr>
                                                                 <th scope="row">{{ $serialNumber++ }}</th>
                                                                 <td>{{ $data->trackingId }}</td>
-                                                                <td>
-                                                                    {!! $data->reply ?? 'No reply yet' !!}
+                                                                <td class="text-center"><center>
+                                                                    <div id="reply-{{ $data->id }}" class="text-truncate" style="max-width: 250px;">
+                                                                        {!! $data->reply ?? 'No reply yet' !!}
+                                                                    </div></center>
 
+                                                                    @if($data->reply)
+                                                                        <a href="javascript:void(0)" onclick="toggleReply('{{ $data->id }}')" class="small text-primary" id="toggle-{{ $data->id }}">View Full</a>
+                                                                    @endif
                                                                 </td>
 
                                                                 <td class="text-center">
@@ -162,5 +167,21 @@
                 submitButton.innerText = 'Please wait while we process your request...';
             });
         });
+
+        function toggleReply(id) {
+            const el = document.getElementById('reply-' + id);
+            const btn = document.getElementById('toggle-' + id);
+            if (el.classList.contains('text-truncate')) {
+                el.classList.remove('text-truncate');
+                el.style.maxWidth = 'none';
+                el.style.whiteSpace = 'normal';
+                btn.innerText = 'Show Less';
+            } else {
+                el.classList.add('text-truncate');
+                el.style.maxWidth = '250px';
+                el.style.whiteSpace = 'nowrap';
+                btn.innerText = 'View Full';
+            }
+        }
     </script>
 @endpush

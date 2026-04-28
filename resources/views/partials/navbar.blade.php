@@ -10,11 +10,11 @@
         </ul>
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center" style="background: transparent;">
             <a class="navbar-brand brand-logo" href="{{ route('user.dashboard') }}" style="font-weight: 600; font-size: 1.5rem; letter-spacing: -0.025em; color: #1e40af; text-decoration: none;">
-                Lite<span style="color: #111827;">verifier</span>
+                Express<span style="color: #111827;">portal</span>
             </a>
 
             <a class="navbar-brand brand-logo-mini" href="{{ route('user.dashboard') }}" style="font-weight: 600; font-size: 1.5rem; color: #1e40af; text-decoration: none;">
-                L<span style="color: #111827;">v</span>
+                E<span style="color: #111827;">p</span>
             </a>
         </div>
         <ul class="navbar-nav navbar-nav-right">

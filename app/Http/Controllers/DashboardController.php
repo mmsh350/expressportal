@@ -117,7 +117,7 @@ class DashboardController extends Controller
                 ],
 
                 [
-                    'title' => 'BVN Search (Phone)',
+                    'title' => 'BVN RETRIVAL',
                     'value' => number_format($bvnSearch),
                     'icon' => 'bi-search',
                     'bg' => 'primary',
@@ -137,12 +137,19 @@ class DashboardController extends Controller
                     'bg' => 'info',
                     'href' => 'admin.nin.services.list',
                 ],
-                 [
+                [
                     'title' => 'NIN DELINK',
                     'value' => number_format($ninDelink),
                     'icon' => 'bi bi-hourglass-split',
                     'bg' => 'secondary',
                     'href' => 'admin.delink.services.list',
+                ],
+                [
+                    'title' => 'Email Retrieval',
+                    'value' => number_format(NinValidation::whereIn('status', ['Pending', 'In-Progress'])->where('tag', 'EMAIL_RETRIVE')->count()),
+                    'icon' => 'bi bi-envelope-open',
+                    'bg' => 'dark',
+                    'href' => 'admin.email.retrive.list',
                 ],
             ];
 

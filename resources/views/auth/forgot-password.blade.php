@@ -1,10 +1,10 @@
 @extends('layouts.auth')
-@section('title', 'Forget Password - Liteverifier')
+@section('title', 'Forget Password - Expressportal')
 @section('content')
 <div class="sm:mx-auto sm:w-full sm:max-w-md">
     <div class="flex justify-center">
         <a href="{{ url('/') }}" class="text-4xl font-semibold tracking-tight text-blue-800 drop-shadow-sm">
-            Lite<span class="text-gray-900">verifier</span>
+            Express<span class="text-gray-900">portal</span>
         </a>
     </div>
     <h2 class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">

@@ -68,8 +68,10 @@
 
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-1 mb-2">
 
-                                                <small class="text-danger"> N.B : RESULTS READY WITHIN 6HRS TO 24HRS
-                                                </small><br />
+                                                @php
+                                                    $bvnNotice = \App\Models\SiteSetting::first()->bvn_notice ?? "N.B : RESULTS READY WITHIN 6HRS TO 24HRS";
+                                                @endphp
+                                                <small class="text-danger">{{ $bvnNotice }}</small><br />
 
                                                 <p class="fw-bold mt-2"> Service Fee:
                                                     &#x20A6;{{ number_format($ServiceFee->amount, 2) }}</p>

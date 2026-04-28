@@ -158,6 +158,11 @@ class ServicesController extends Controller
                 $request_type = 'delink-services';
                 break;
 
+            case 'email-retrive-services':
+                $requests = NinValidation::with(['user', 'transactions'])->findOrFail($request_id);
+                $request_type = 'email-retrive-services';
+                break;
+
             case 'vnin-to-nibss':
 
                 break;
@@ -192,6 +197,10 @@ class ServicesController extends Controller
 
         if ($type === 'delink-services') {
             $route = 'admin.delink.services.list';
+        }
+
+        if ($type === 'email-retrive-services') {
+            $route = 'admin.email.retrive.list';
         }
 
         $status = $request->status;
@@ -370,8 +379,10 @@ class ServicesController extends Controller
      public function ninDelink(Request $request)
     {
 
-        $services = Service::where('type', 'nin_services_delink')
+        $services = Service::where('service_code', '131')
+            ->where('type', 'nin_services_delink')
             ->where('status', 'enabled')->get();
+
 
         $query = NinValidation::where('user_id', auth()->id())->where('tag', 'DELINK');
 
@@ -436,8 +447,6 @@ class ServicesController extends Controller
         switch ($request->input('service')) {
 
             case '131':
-            case '132':
-            case '133':
                 // NIN only
                 $rules += [
                     'nin' => ['required', 'digits:11'],
@@ -495,11 +504,124 @@ class ServicesController extends Controller
                     ]);
 
                     return redirect()->back()->with('success', 'Self Service Delink request has been submitted , kindly check the status within 5 working days');
+                } catch (\Exception $e) {
+                    return redirect()->back()->with('error', 'An error occurred while making the API request');
+                }
+        }
+    }
 
-            } catch (\Exception $e) {
+    public function emailRetrive(Request $request)
+    {
+        $services = Service::where('service_code', '132')
+            ->where('type', 'email_retrive')
+            ->where('status', 'enabled')->get();
 
-                redirect()->back()->with('error', 'An error occurred while making the API request');
-            }
+        $query = NinValidation::where('user_id', auth()->id())->where('tag', 'EMAIL_RETRIVE');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nin_number', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('description', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->input('date_from'));
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->input('date_to'));
+        }
+
+        $ninServices = $query->orderBy('id', 'desc')->paginate(10);
+
+        $statusCounts = NinValidation::selectRaw('status, COUNT(*) as count')
+            ->where('user_id', auth()->id())
+            ->where('tag', 'EMAIL_RETRIVE')
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        $totalAll = NinValidation::where('user_id', auth()->id())
+            ->where('tag', 'EMAIL_RETRIVE')
+            ->count();
+
+        $totalPending = $statusCounts['Pending'] ?? 0;
+        $totalFailed = $statusCounts['Failed'] ?? 0;
+        $totalInProgress = $statusCounts['In-Progress'] ?? 0;
+        $totalSuccessful = $statusCounts['Successful'] ?? 0;
+
+        $settings = SiteSetting::first();
+
+        return view('email-retrive-services', compact(
+            'services',
+            'ninServices',
+            'totalAll',
+            'totalPending',
+            'totalFailed',
+            'totalInProgress',
+            'totalSuccessful',
+            'settings'
+        ));
+    }
+
+    public function requestEmailRetrive(Request $request)
+    {
+        $rules = [
+            'service' => ['required', 'exists:services,service_code'],
+        ];
+
+        switch ($request->input('service')) {
+            case '132':
+                $rules += [
+                    'nin' => ['required', 'digits:11'],
+                    'email' => ['nullable', 'email'],
+                ];
+                break;
+        }
+
+        $request->validate($rules);
+
+        $Service = Service::where('service_code', $request->input('service'))
+            ->where('status', 'enabled')
+            ->first();
+
+        if (!$Service) {
+            return redirect()->back()->with('error', 'Sorry Action not Allowed !');
+        }
+
+        $ServiceFee = $Service->amount;
+        $serviceType = 'Self Service ' . $Service->name;
+        $wallet = Wallet::where('user_id', auth()->id())->first();
+
+        if ($wallet->balance < $ServiceFee) {
+            return redirect()->back()->with('error', 'Sorry Wallet Not Sufficient for Transaction !');
+        }
+
+        try {
+            DB::transaction(function () use ($wallet, $ServiceFee, $serviceType, $request, $Service) {
+                $wallet->balance -= $ServiceFee;
+                $wallet->save();
+
+                $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($ServiceFee, 2);
+                $transaction = $this->transactionService->createTransaction(auth()->id(), $ServiceFee, $serviceType, $serviceDesc, 'Wallet', 'Approved');
+
+                NinValidation::create([
+                    'user_id' => auth()->id(),
+                    'tnx_id' => $transaction->id,
+                    'refno' => $transaction->referenceId,
+                    'nin_number' => $request->nin,
+                    'email' => $request->email ?? 'Not provided',
+                    'description' => $serviceType,
+                    'tag' => 'EMAIL_RETRIVE',
+                ]);
+            });
+
+            return redirect()->back()->with('success', 'Self Service Email Retrieval request has been submitted, kindly check the status within 5 working days');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while processing your request: ' . $e->getMessage());
         }
     }
 
@@ -564,4 +686,45 @@ class ServicesController extends Controller
         ));
     }
 
+    public function emailRetriveList(Request $request)
+    {
+        $pending = NinValidation::whereIn('status', ['Pending', 'In-Progress'])->where('tag', 'EMAIL_RETRIVE')->count();
+        $resolved = NinValidation::where('status', 'Successful')->where('tag', 'EMAIL_RETRIVE')->count();
+        $rejected = NinValidation::where('status', 'Failed')->where('tag', 'EMAIL_RETRIVE')->count();
+        $total_request = NinValidation::where('tag', 'EMAIL_RETRIVE')->count();
+
+        $query = NinValidation::with(['user', 'transactions'])->where('tag', 'EMAIL_RETRIVE');
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('refno', 'like', "%{$searchTerm}%")
+                    ->orWhere('nin_number', 'like', "%{$searchTerm}%")
+                    ->orWhere('email', 'like', "%{$searchTerm}%")
+                    ->orWhere('status', 'like', "%{$searchTerm}%")
+                    ->orWhereHas('user', function ($subQuery) use ($searchTerm) {
+                        $subQuery->where('name', 'like', "%{$searchTerm}%");
+                    });
+            });
+        }
+
+        if ($dateFrom = request('date_from')) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo = request('date_to')) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        $nin_services = $query
+            ->orderByRaw("CASE WHEN status = 'Pending' THEN 1 WHEN status = 'In-Progress' THEN 2 ELSE 3 END")
+            ->orderByDesc('id')
+            ->paginate(10);
+
+        $request_type = 'email-retrive-services';
+
+        return view('admin.email-retrive-list', compact(
+            'pending', 'resolved', 'rejected', 'total_request', 'nin_services', 'request_type'
+        ));
+    }
 }

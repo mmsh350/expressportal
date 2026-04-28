@@ -22,5 +22,6 @@ class SiteSetting extends Model
         'register_enabled',
         'delink_notice',
         'ipe_notice',
+        'bvn_notice',
     ];
 }

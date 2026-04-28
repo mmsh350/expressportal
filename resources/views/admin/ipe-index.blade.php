@@ -20,6 +20,9 @@
         .form-check-input, .form-check-label {
             cursor: pointer;
         }
+        .modal-backdrop {
+            z-index: 9998 !important;
+        }
     </style>
 @endpush
 
@@ -120,43 +123,6 @@
                                                 </div>
                                             @endif
                                             <div class="col-12  mb-3">
-                                                {{-- <div class="mb-3 d-flex flex-wrap align-items-center gap-2">
-                                                    <a href="{{ route('admin.ipe.download-template') }}"
-                                                        class="btn btn-outline-primary">
-                                                        <i class="las la-file-excel"></i> Download Excel Data
-                                                    </a>
-
-                                                    <form action="{{ route('admin.ipe.upload-excel') }}" method="POST"
-                                                        enctype="multipart/form-data">
-                                                        @csrf
-                                                        <label for="excel-upload" class="btn btn-outline-success mb-0"
-                                                            style="cursor: pointer;">
-                                                            <i class="las la-upload"></i> Upload Excel
-                                                        </label>
-                                                        <input type="file" name="excel_file" id="excel-upload"
-                                                            accept=".xlsx,.xls" style="display: none;"
-                                                            onchange="this.form.submit()">
-                                                    </form>
-
-                                                     <a href="{{ route('admin.ipe.refund') }}" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to process refunds for all failed {{ $refund_count }} transactions?');">
-                                                        <i class="las la-exchange-alt"></i> Refund
-                                                        <span class="rounded">({{ $refund_count }})</span>
-                                                    </a>
-
-                                                    <div class="w-100 d-sm-block d-md-inline mt-2">
-                                                        <span class="text-success d-block">
-                                                            ✅ Response Code 200: Success
-                                                        </span>
-                                                        <span class="text-warning d-block">
-                                                            ⚠️ Response Code 400: Failed
-                                                        </span>
-                                                        <span class="text-danger d-block">
-                                                            ❗ All fields in the Excel file must be filled out
-                                                        </span>
-                                                    </div>
-
-                                                </div> --}}
 
                                                 <form action="{{ route('admin.ipe.index') }}" method="GET">
                                                     <div class="row g-2">
@@ -214,7 +180,7 @@
                                                 @endphp
 
                                                 <div class="table-responsive">
-                                                    <table class="table text-nowrap"
+                                                    <table class="table"
                                                         style="background:#fafafc !important">
                                                         <thead>
                                                             <tr>
@@ -239,7 +205,11 @@
                                                                     <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y h:i A') }}
                                                                     </td>
                                                                     <td>{{ $data->trackingId }}</td>
-                                                                    <td>{!! $data->reply !!}</td>
+                                                                    <td>
+                                                                        <div class="text-truncate" style="max-width: 200px;" title="{{ strip_tags($data->reply) }}">
+                                                                            {!! strip_tags($data->reply) !!}
+                                                                        </div>
+                                                                    </td>
 
                                                                     <td class="text-center">
                                                                         @if ($data->resp_code == '200')
@@ -287,84 +257,72 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Reply Modal -->
-                                                <div class="modal fade" id="replyModal" tabindex="-1" aria-hidden="true">
-                                                    <div class="modal-dialog modal-dialog-centered">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h6 class="modal-title">Reply IPE Clearance (<span id="modalTrackingId"></span>)</h6>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form method="POST" id="replyForm">
-                                                                    @csrf
-                                                                    <div class="mb-3">
-                                                                        <label class="form-label fw-semibold">Status</label>
-                                                                        <select name="status" id="statusSelect" class="form-select" style="color: black;" required>
-                                                                            <option value="" disabled selected>-- Select Status --</option>
-                                                                            <option value="200">Successful</option>
-                                                                            <option value="101">Processing</option>
-                                                                            <option value="400">Failed</option>
-                                                                            <option value="100">Pending</option>
-                                                                        </select>
-                                                                    </div>
-
-                                                                    <div class="mb-3 d-none" id="refundSection">
-                                                                        <label class="form-label fw-semibold">Refund Options</label>
-                                                                        <div class="d-flex gap-3">
-                                                                            @foreach([10, 20, 30, 50, 100] as $perc)
-                                                                                <div class="form-check">
-                                                                                    <input class="form-check-input refund-perc" type="radio" name="refund_perc" id="perc{{$perc}}" value="{{$perc}}">
-                                                                                    <label class="form-check-label" for="perc{{$perc}}">{{$perc}}%</label>
-                                                                                </div>
-                                                                            @endforeach
-                                                                        </div>
-                                                                        <label class="form-label small">Refund Amount (₦)</label>
-                                                                        <input type="number" step="0.01" name="refund_amount" id="refundAmount" class="form-control">
-                                                                    </div>
-
-                                                                    <div class="mb-3">
-                                                                        <label class="form-label fw-semibold">Comment</label>
-                                                                        <div id="editor" style="height: 150px;"></div>
-                                                                        <input type="hidden" name="comment" id="commentInput">
-                                                                        <input type="hidden" name="id" id="requestId">
-                                                                        <input type="hidden" id="trxAmount">
-                                                                    </div>
-
-                                                                    <button type="submit" class="btn btn-primary w-100">Submit Reply</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <div class="text-center">
-                                                    <img width="65%"
-                                                        src="{{ asset('assets/images/no-transaction.gif') }}"
-                                                        alt="No Requests Available">
-                                                    <p class="fw-semibold fs-15">No Request Available!</p>
-                                                </div>
-                                            @endif
-                                        </div>
-
-                                    </div>
-
-
-                        </div>
-
-
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </div>
+                                             @endif
+                                         </div>
+ 
+                                     </div>
+                         </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+ 
+         </div>
+     </div>
+ 
+     <!-- Reply Modal moved to bottom for better stacking context -->
+     <div class="modal shadow-lg" id="replyModal" tabindex="-1" aria-hidden="true" style="z-index: 9999;">
+         <div class="modal-dialog modal-dialog-centered">
+             <div class="modal-content border-0 shadow-sm">
+                 <div class="modal-header bg-primary text-white">
+                     <h6 class="modal-title text-white">Reply IPE Clearance (<span id="modalTrackingId"></span>)</h6>
+                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                 </div>
+                 <div class="modal-body">
+                     <form method="POST" id="replyForm">
+                         @csrf
+                         <div class="mb-3">
+                             <label class="form-label fw-semibold">Status</label>
+                             <select name="status" id="statusSelect" class="form-select" style="color: black;" required>
+                                 <option value="" disabled selected>-- Select Status --</option>
+                                 <option value="200">Successful</option>
+                                 <option value="101">Processing</option>
+                                 <option value="400">Failed</option>
+                                 <option value="100">Pending</option>
+                             </select>
+                         </div>
+ 
+                         <div class="mb-3 d-none" id="refundSection">
+                             <label class="form-label fw-semibold">Refund Options</label>
+                             <div class="d-flex gap-3">
+                                 @foreach([10, 20, 30, 50, 100] as $perc)
+                                     <div class="form-check">
+                                         <input class="form-check-input refund-perc" type="radio" name="refund_perc" id="perc{{$perc}}" value="{{$perc}}">
+                                         <label class="form-check-label" for="perc{{$perc}}">{{$perc}}%</label>
+                                     </div>
+                                 @endforeach
+                             </div>
+                             <label class="form-label small">Refund Amount (₦)</label>
+                             <input type="number" step="0.01" name="refund_amount" id="refundAmount" class="form-control">
+                         </div>
+ 
+                         <div class="mb-3">
+                             <label class="form-label fw-semibold">Comment</label>
+                             <div id="editor" style="height: 150px; background: #fff;"></div>
+                             <input type="hidden" name="comment" id="commentInput">
+                             <input type="hidden" name="id" id="requestId">
+                             <input type="hidden" id="trxAmount">
+                         </div>
+ 
+                         <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">Submit Reply</button>
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script>
         $(document).ready(function() {
             var quill = new Quill('#editor', {
@@ -372,20 +330,22 @@
                 placeholder: 'Type your reply here...'
             });
 
-            $('#replyModal').on('show.bs.modal', function(event) {
-                var button = $(event.relatedTarget);
-                var id = button.data('id');
-                var tracking = button.data('tracking');
-                var trxAmount = button.data('trxamount');
+            const replyModal = document.getElementById('replyModal');
+            if (replyModal) {
+                replyModal.addEventListener('show.bs.modal', function(event) {
+                    const button = event.relatedTarget;
+                    const id = button.getAttribute('data-id');
+                    const tracking = button.getAttribute('data-tracking');
+                    const trxAmount = button.getAttribute('data-trxamount');
 
-                var modal = $(this);
-                modal.find('#modalTrackingId').text(tracking);
-                modal.find('#requestId').val(id);
-                modal.find('#trxAmount').val(trxAmount);
-                modal.find('#replyForm').attr('action', '/admin/requests/ipe/' + id + '/update-status');
+                    document.getElementById('modalTrackingId').textContent = tracking;
+                    document.getElementById('requestId').value = id;
+                    document.getElementById('trxAmount').value = trxAmount;
+                    document.getElementById('replyForm').setAttribute('action', '/admin/requests/ipe/' + id + '/update-status');
 
-                quill.root.innerHTML = '';
-            });
+                    quill.root.innerHTML = '';
+                });
+            }
 
             $('#statusSelect').on('change', function() {
                 var status = $(this).val();

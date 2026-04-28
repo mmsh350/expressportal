@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'Self Service Delink')
+@section('title', 'Self Service Email Retrieval')
 @push('styles')
     <style>
         .pagination .page-link {
@@ -50,7 +50,7 @@
                                 @endif
                                 <h6 class="text-center text-uppercase text-muted fw-semibold mb-3"
                                     style="font-size: 0.85rem;">
-                                    Total Self Service Requests
+                                    Total Email Retrieval Requests
                                 </h6>
 
                                 <div class="row g-2 justify-content-center">
@@ -101,8 +101,8 @@
                             </div>
                         </div>
 
-                        <h4 class="card-title">Self Service Delinking</h4>
-                        <p class="card-description">Submit NIN Self Service Delinking Request</p>
+                        <h4 class="card-title">Self Service Email Retrieval</h4>
+                        <p class="card-description">Submit Email Retrieval Request</p>
 
                         <div class="row">
                             <div class="col-md-12 mb-3" role="tabpanel" aria-labelledby="new-tab">
@@ -112,7 +112,7 @@
 
                                     <div class="px-2">
                                         <small class="font-italic text-danger d-block">
-                                            {{ $settings->delink_notice ?? 'Please note that this request can take up to 5 working days to be processed. We appreciate your patience and will keep you updated on the status.' }}
+                                            Please note that this request can take up to 5 working days to be processed. We appreciate your patience.
                                         </small>
                                     </div>
                                 </div>
@@ -120,7 +120,7 @@
                                 <div class="row text-center">
                                     <div class="col-md-12">
                                         <form id="form" name="nin-request" method="POST"
-                                            action="{{ route('user.nin.services.delink.request') }}"
+                                            action="{{ route('user.email.retrive.request') }}"
                                             enctype="multipart/form-data">
                                             @csrf
 
@@ -159,7 +159,7 @@
 
                             <div class="col-md-12" role="tabpanel" aria-labelledby="history-tab">
 
-                                <form method="GET" action="{{ route('user.nin.delink') }}"
+                                <form method="GET" action="{{ route('user.email.retrive') }}"
                                     class="row g-2 mb-3 mt-2 align-items-end">
 
                                     <div class="row g-2">
@@ -316,14 +316,14 @@
                 let inputs = '';
 
                 switch (selectedItem) {
-                    case '131':
+                    case '132':
 
                         labelText = "Enter your Details";
                         inputs += createInput('nin', 'Enter NIN Number', 11, 'text', '^\\d{11}$',
                             'NIN must be 11 digits');
 
-                        // inputs += createInput('email', 'Enter Email Address (Optional)', 60, 'email', '',
-                        //     'Email must be a valid email address', '');
+                        inputs += createInput('email', 'Enter Email Address (Optional)', 60, 'email', '',
+                            'Email must be a valid email address', '');
                         break;
                     default:
                         break;

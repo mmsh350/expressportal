@@ -47,6 +47,7 @@ class SiteSettingController extends Controller
             'register_enabled' => 'nullable|boolean',
             'delink_notice' => 'nullable|string',
             'ipe_notice' => 'nullable|string',
+            'bvn_notice' => 'nullable|string',
         ]);
 
         // For each checkbox, set 1 if present, 0 if missing

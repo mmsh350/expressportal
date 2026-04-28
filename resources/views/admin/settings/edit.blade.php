@@ -89,10 +89,16 @@
                         <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed at the top of the NIN Delinking request form for users.</small>
                     </div>
 
-                    <div>
+                    <div class="mb-4">
                         <label for="ipe_notice" class="form-label fw-semibold">IPE Service Notice</label>
                         <textarea name="ipe_notice" id="ipe_notice" class="form-control bg-light border-0 px-3 py-2" rows="3" placeholder="Enter the notice message to display on the IPE request page...">{{ old('ipe_notice', $settings->ipe_notice ?? '') }}</textarea>
                         <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed below the tracking number on the IPE form for users.</small>
+                    </div>
+
+                    <div>
+                        <label for="bvn_notice" class="form-label fw-semibold">BVN Retrieval Notice</label>
+                        <textarea name="bvn_notice" id="bvn_notice" class="form-control bg-light border-0 px-3 py-2" rows="3" placeholder="Enter the notice message to display on the BVN Retrieval page...">{{ old('bvn_notice', $settings->bvn_notice ?? '') }}</textarea>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed on the BVN Retrieval form for users.</small>
                     </div>
                 </div>
             </div>
