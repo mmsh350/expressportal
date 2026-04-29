@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'NIN Validation')
+@section('title', 'BVN User Request')
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
     <style>
@@ -19,7 +19,7 @@
                 <div class="col-xl-12">
                     <div class="card custom-card ">
                         <div class="card-header">
-                            <h5 class="card-title">NIN Services Request</h5>
+                            <h5 class="card-title">BVN User Request</h5>
                         </div>
                         <div class="card-body">
                             @if (session('success'))
@@ -86,93 +86,91 @@
                                                 <div class="col-md-6 mb-4">
                                                     <div class="p-3 border rounded bg-light">
                                                         <h6 class="text-uppercase text-muted mb-3">Customer Information</h6>
-                                                        <p><i class="ti ti-user fs-16"></i> &nbsp;<strong>Full
+                                                        <p> &nbsp;<strong>Full
                                                                 Name:</strong>
-                                                            {{ $requests->user->name }}</p>
-                                                        <p><i class="ti ti-mail fs-16"></i> &nbsp;<strong>Email:</strong>
-                                                            {{ $requests->user->email }}</p>
-                                                        <p><i class="ti ti-phone fs-16"></i> &nbsp;<strong>Phone:</strong>
-                                                            {{ $requests->user->phone_number }}</p>
+                                                            {{ optional($requests->user)->name ?? 'N/A' }}</p>
+                                                        <p>  &nbsp;<strong>Email:</strong>
+                                                            {{ optional($requests->user)->email ?? 'N/A' }}</p>
+                                                        <p>&nbsp;<strong>Phone:</strong>
+                                                            {{ optional($requests->user)->phone_number ?? 'N/A' }}</p>
                                                     </div>
                                                 </div>
                                                 <!-- Transaction Details -->
                                                 <div class="col-md-6 mb-4">
-                                                    <div class="p-3 border rounded bg-light">
-                                                        <h6 class="text-uppercase text-muted mb-3">Transaction Information
-                                                        </h6>
-                                                        <p><strong>Transaction ID:</strong>
-                                                            {{ $requests->transactions->id ?? 'N/A' }}</p>
-                                                        <p><strong>Amount:</strong>
-                                                            ₦{{ number_format($requests->transactions->amount ?? 0, 2) }}
-                                                        </p>
-                                                        <p><strong>Service Type:</strong>
-                                                            {{ $requests->transactions->service_type ?? 'N/A' }}
-                                                        </p>
-                                                    </div>
-                                                </div>
+    <div class="p-3 border rounded bg-light">
+        <h6 class="text-uppercase text-muted mb-3">Transaction Information</h6>
+
+        <p><strong>Transaction ID:</strong>
+            {{ optional($requests->transactions)->id ?? 'N/A' }}
+        </p>
+
+        <p><strong>Amount:</strong>
+            ₦{{ number_format(optional($requests->transactions)->amount ?? 0, 2) }}
+        </p>
+
+        <p><strong>Service Type:</strong>
+            {{ optional($requests->transactions)->service_type }}
+
+        </p>
+    </div>
+</div>
+
                                             </div>
 
                                             <!-- Request Details Section -->
 
-                                            @if ($request_type == 'crm')
-                                            @elseif ($request_type == 'crm2')
-
-                                            @elseif($request_type == 'bvn-enrollment')
-
-                                             @elseif($request_type == 'nin-services' || $request_type == 'delink-services' || $request_type == 'email-retrive-services')
-                                                <div class="mb-4">
-                                                    <div class="p-3 border rounded bg-light">
-                                                        <h6 class="text-uppercase mb-3">
-                                                            <span class="text-muted">Request Information</span> -
-                                                            {{-- <strong>NIN SERVICE</strong> --}}
-                                                        </h6>
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <p><strong>Reference No.:</strong>
-                                                                    {{ strtoupper($requests->refno) }}</p>
-                                                                <p><strong>Service Type.:</strong>
-                                                                    {{ $request_type == 'delink-services' ? 'NIN Delink' : ($request_type == 'email-retrive-services' ? 'Email Retrieval' : 'NIN Service') }}</p>
-                                                                <p><strong>NIN Number.:</strong>
-                                                                    {{ strtoupper($requests->nin_number) }}</p>
-
-                                                                <p><strong>Reason.:</strong>
-                                                                    {{ strtoupper($requests->description) }}</p>
-                                                            </div>
-                                                            <div class="col-md-6">
-
-                                                                <p><strong>Date Sent:</strong>
-                                                                    {{ \Carbon\Carbon::parse($requests->created_at)->format('d/m/Y') }}
-                                                                </p>
-                                                              <p><strong>Status:</strong>
-                                                                    @if ($requests->status == 'Pending')
-                                                                        <span class="badge bg-warning">Pending</span>
-                                                                    @elseif($requests->status == 'Successful')
-                                                                        <span class="badge bg-success">Resolved</span>
-                                                                    @elseif($requests->status == 'In-Progress')
-                                                                        <span class="badge bg-primary">Processing</span>
-                                                                    @else
-                                                                        <span class="badge bg-danger">Rejected</span>
-                                                                    @endif
-                                                                </p>
-
-                                                            </div>
-
-                                                        </div>
-
-                                                        <p class="mt-3"><strong>Comments:</strong><br>
-                                                            {!! $requests->reason !!}</p>
-                                                        <hr>
-                                                    </div>
-
-                                                </div>
+                                <div class="row p-3 border rounded bg-light">
+                                    <div class="col-md-6 border-end">
+                                        <h6 class="text-primary fw-bold mb-3">Agent & Account Information</h6>
+                                        <p><strong>Reference No.:</strong> {{ strtoupper($requests->refno) }}</p>
+                                        <p><strong>Request Type:</strong> {{ strtoupper(optional($requests->transactions)->service_type ?? 'N/A') }}</p>
+                                        <p><strong>Agent BVN:</strong> {{ $requests->bvn }}</p>
+                                        <p><strong>Agent Location:</strong> {{ $requests->agent_location ?? 'N/A' }}</p>
+                                        <p><strong>Kegow Account:</strong> {{ $requests->kegow_account ?? 'N/A' }}</p>
+                                        <p><strong>Bank Account Name:</strong> {{ $requests->account_name }}</p>
+                                        <p><strong>Bank Account No:</strong> {{ $requests->account_number }}</p>
+                                        <p><strong>Date:</strong> {{ \Carbon\Carbon::parse($requests->created_at)->format('d/m/Y H:i') }}</p>
+                                        <p><strong>Status:</strong>
+                                            @if ($requests->status == 'submitted')
+                                                <span class="badge bg-warning">Pending</span>
+                                            @elseif($requests->status == 'successful')
+                                                <span class="badge bg-success">Successful</span>
+                                            @elseif($requests->status == 'processing')
+                                                <span class="badge bg-primary">Processing</span>
                                             @else
-                                                //Do nothing
+                                                <span class="badge bg-danger">Rejected</span>
                                             @endif
+                                        </p>
+                                    </div>
+                                    <div class="col-md-6 ps-md-4">
+                                        <h6 class="text-primary fw-bold mb-3">Personal & Contact Details</h6>
+                                        <p><strong>First Name:</strong> {{ $requests->first_name ?? 'N/A' }}</p>
+                                        <p><strong>Last Name:</strong> {{ $requests->last_name ?? 'N/A' }}</p>
+                                        <p><strong>Email ID:</strong> {{ $requests->email }}</p>
+                                        <p><strong>Phone No.:</strong> {{ $requests->phone_number }}</p>
+                                        <p><strong>Date of Birth:</strong> {{ $requests->dob ?? 'N/A' }}</p>
+                                        <p><strong>Geo Zone:</strong> {{ $requests->geo_zone ?? 'N/A' }}</p>
+                                        <p><strong>State:</strong> {{ $requests->state }}</p>
+                                        <p><strong>LGA:</strong> {{ $requests->lga }}</p>
+                                        <p><strong>City:</strong> {{ $requests->city ?? 'N/A' }}</p>
+                                        <p><strong>Full Address:</strong> {{ $requests->address }}</p>
+                                    </div>
+
+                                    <div class="col-12 mt-4 border-top pt-3">
+                                        <p><strong>Admin Comments:</strong><br /> {!! $requests->reason ?? 'No comments yet.' !!}</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
                                             <!-- Comment and Action Section -->
-                                            <div class="p-3 border rounded bg-light">
+                                            <div class="p-3 border rounded bg-light mt-5">
                                                 <h6 class="text-uppercase text-muted mb-3">Action</h6>
                                                 <form
-                                                    action="{{ route('admin.update-request-status', [$requests->id, $request_type]) }}"
+                                                    action="{{ route('admin.update-request-status2', [$requests->id, $request_type]) }}"
                                                     method="POST" id="statusForm">
                                                     @csrf
 
@@ -184,9 +182,9 @@
                                                             required>
                                                             <option value="" disabled selected>-- Choose Status --
                                                             </option>
-                                                            <option value="Successful">Resolved</option>
-                                                            <option value="In-Progress">Processing</option>
-                                                            <option value="Failed">Rejected</option>
+                                                            <option value="successful">Resolved</option>
+                                                            <option value="processing">Processing</option>
+                                                            <option value="rejected">Rejected</option>
                                                         </select>
                                                     </div>
 
@@ -267,24 +265,54 @@
                         function clear() {
                             quill.root.innerHTML = '';
                         }
+                        // Toggle Refund Option
+                        const statusSelect = document.getElementById('status');
+                        const refundOption = document.getElementById('refundOption');
+                        statusSelect.addEventListener('change', function() {
+                            clear();
+                            if (this.value === 'rejected') {
 
+                                refundOption.classList.remove('d-none');
+                            } else if (this.value === 'processing') {
+                                quill.root.innerHTML =
+                                    "Thank you for reaching out. Your request has been received and is currently being processed. We will notify you promptly upon resolution."
+                            } else {
+                                refundOption.classList.add('d-none');
+                            }
+                        });
+
+                        // Handle Form Submission
+                        const form = document.getElementById('statusForm');
+                        form.addEventListener('submit', function(event) {
+                            // Get Quill content as HTML
+                            const commentContent = quill.root.innerHTML;
+                            // Set it in the hidden input
+                            document.getElementById('commentInput').value = commentContent;
+
+                            // Optionally: Validate the comment is not empty
+                            if (quill.getText().trim().length === 0) {
+                                event.preventDefault();
+                                alert('Please add a comment before submitting.');
+                            }
+                        });
+                    });
+                </script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
                         const statusSelect = document.getElementById('status');
                         const refundOption = document.getElementById('refundOption');
                         const refundAmountInput = document.getElementById('refundAmount');
                         const refundPercentageRadios = document.querySelectorAll('.refund-percentage');
-                        const transactionAmount = {{ $requests->transactions->amount ?? 0 }};
 
+                        // Transaction amount (Replace with actual value if dynamic)
+                        const transactionAmount = {{ optional($requests->transactions)->amount ?? 0 }};
+
+                        // Show or hide refund option based on status
                         statusSelect.addEventListener('change', function() {
-                            clear();
-                            if (this.value === 'Failed') {
+                            if (this.value === 'rejected') {
                                 refundOption.classList.remove('d-none');
                                 refundAmountInput.setAttribute('required', 'required');
-                            } else if (this.value === 'In-Progress') {
-                                quill.root.innerHTML = "Thank you for reaching out. Your request has been received and is currently being processed. We will notify you promptly upon resolution.";
-                                refundOption.classList.add('d-none');
-                                refundAmountInput.removeAttribute('required');
-                                refundAmountInput.value = '';
-                                refundPercentageRadios.forEach(radio => (radio.checked = false));
+
                             } else {
                                 refundOption.classList.add('d-none');
                                 refundAmountInput.removeAttribute('required');
@@ -298,24 +326,13 @@
                             radio.addEventListener('change', function() {
                                 const percentage = parseInt(this.value, 10);
                                 const refundAmount = (transactionAmount * percentage) / 100;
-                                refundAmountInput.value = refundAmount.toFixed(2);
+                                refundAmountInput.value = `${refundAmount}`;
                             });
-                        });
-
-                        // Handle Form Submission
-                        const form = document.getElementById('statusForm');
-                        form.addEventListener('submit', function(event) {
-                            const commentContent = quill.root.innerHTML;
-                            document.getElementById('commentInput').value = commentContent;
-
-                            if (quill.getText().trim().length === 0) {
-                                event.preventDefault();
-                                alert('Please add a comment before submitting.');
-                            }
                         });
                     });
                 </script>
 
                 <!-- Quill Editor JS -->
                 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+                <!-- Internal Quill JS -->
             @endpush

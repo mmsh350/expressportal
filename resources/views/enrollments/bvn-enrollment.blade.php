@@ -11,8 +11,8 @@
             <div class=" grid-margin stretch-card col-md-10   grid-margin stretch-card ">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">BVN User Request</h4>
-                        <p class="card-description">Apply for BVN User Request: Become
+                        <h4 class="card-title">BVN Agent Request</h4>
+                        <p class="card-description">Apply for BVN Agent Request: Become
                             an
                             Authorized Agent for BVN Support</p>
                         <ul class="nav nav-tabs" role="tablist">
@@ -33,14 +33,16 @@
                                     <img class="img-fluid" src="{{ asset('assets/images/bvn.jpg') }}" width="30%">
                                 </center>
                                 <center>
-                                    <small class="font-italic text-danger"><i>Please note that this
-                                            request will be processed in the next 5 Working days. Kindly
-                                            provide a valid email address and phone nummber.
-                                            In addition the email address and phone number provided should be unique to
-                                            this user
-                                            and not already associated with another registered user.
-                                        </i>
-                                    </small>
+                                    <small class="font-italic text-danger"><i>
+                                        @if(!empty($settings->bvn_enrollment_notice))
+                                            {!! nl2br(e($settings->bvn_enrollment_notice)) !!}
+                                        @else
+                                            Please note that this request will be processed in the next 5 Working days.
+                                            Kindly provide a valid email address and phone number. In addition the email
+                                            address and phone number provided should be unique to this user and not
+                                            already associated with another registered user.
+                                        @endif
+                                    </i></small>
                                 </center>
                                 @if (session('success'))
                                     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -63,104 +65,110 @@
                                         </ul>
                                     </div>
                                 @endif
-                                <div class="row text-center">
+                                <div class="row">
                                     <div class="col-md-12">
-                                        <form name="enroll" id="enroll" method="POST"
-                                            action="{{ route('user.enroll-bvn') }}">
+                                        <form name="enroll" id="enroll" method="POST" action="{{ route('user.enroll-bvn') }}">
                                             @csrf
-                                            <div class="mb-3 row">
-
-
-                                                <div class="col-md-12  mt-2 mb-0">
-                                                    <p class="form-label">Fullname</p>
-                                                    <input type="text" id="fullname" name="fullname"
-                                                        class="form-control  " required />
-                                                </div>
-                                                <div class="col-md-12  mt-2 mb-0">
-                                                    <p class="form-label">Email Address</p>
-                                                    <input type="text" id="email" name="email"
-                                                        class="form-control  " required />
-                                                </div>
-                                                <div class="col-md-12  mt-2 mb-0">
-                                                    <p class="form-label">Phone Number</p>
-                                                    <input type="text" id="phone" name="phone" maxlength="11"
-                                                        class="form-control  " required />
-                                                </div>
-
-                                                <div class="col-md-12 mt-2">
-                                                    <div class="row">
-                                                        <div class="col-md-6 mt-2 mb-0">
-                                                            <p class="form-label">Username</p>
-                                                            <input type="text" id="username" name="username"
-                                                                class="form-control" />
-                                                        </div>
-
-                                                        <div class="col-md-6  mt-2 mb-0">
-                                                            <p class="form-label">State</p>
-                                                            <input type="text" id="state" name="state"
-                                                                class="form-control  " required />
-                                                        </div>
-                                                        <div class="col-md-6 mt-2 mb-0">
-                                                            <p class="form-label">City</p>
-                                                            <input type="text" id="city" name="city"
-                                                                class="form-control  " required />
-                                                        </div>
-                                                        <div class="col-md-6 mt-2 mb-0">
-                                                            <p class="form-label">LGA </p>
-                                                            <input type="text" id="lga" name="lga"
-                                                                class="form-control  " required />
-                                                        </div>
+                                            <div class="mb-4 text-start">
+                                                <h6 class="text-primary fw-bold mb-3">Agent Credentials</h6>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Agent BVN</label>
+                                                        <input type="text" name="agent_bvn" maxlength="11" class="form-control" placeholder="11-digit BVN" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Agent Location</label>
+                                                        <input type="text" name="agent_location" class="form-control" placeholder="Office/Shop Location" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Kegow Account</label>
+                                                        <input type="text" name="kegow_account" maxlength="10" class="form-control" placeholder="10-digit Account No." required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Account Name</label>
+                                                        <input type="text" name="account_name" class="form-control" placeholder="Bank Account Name" required />
                                                     </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="col-md-12  mt-2 mb-0">
-                                                    <p class="form-label">Business Address </p>
-                                                    <textarea class="form-control" name="address" id="address" required></textarea>
-                                                </div>
-                                                <div class="col-md-12 mt-2">
-                                                    <div class="row">
-                                                        <div class="col-md-6  mt-2 mb-0">
-                                                            <p class="form-label">BVN</p>
-                                                            <input type="text" id="bvn" name="bvn"
-                                                                maxlength="11" class="form-control" required />
-                                                        </div>
-                                                        <div class="col-md-6 mt-2 mb-0">
-                                                            <p class="form-label">Account Number </p>
-                                                            <input type="text" id="account_number"
-                                                                name="account_number" maxlength="10"
-                                                                class="form-control  " required />
-                                                        </div>
-                                                        <div class="col-md-6 mt-2 mb-0">
-                                                            <p class="form-label">Bank Name </p>
-                                                            <input type="text" id="bank_name" name="bank_name"
-                                                                class="form-control  " required />
-                                                        </div>
-                                                        <div class="col-md-6 mt-2 mb-0">
-                                                            <p class="form-label">Account Name </p>
-                                                            <input type="text" id="account_name" name="account_name"
-                                                                class="form-control  " required />
-                                                        </div>
+                                            <div class="mb-4 text-start">
+                                                <h6 class="text-primary fw-bold mb-3">Personal Details</h6>
+                                                <div class="row g-3">
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">First Name</label>
+                                                        <input type="text" name="first_name" class="form-control" placeholder="Legal First Name" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Last Name</label>
+                                                        <input type="text" name="last_name" class="form-control" placeholder="Legal Last Name" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Email Address</label>
+                                                        <input type="email" name="email" class="form-control" placeholder="example@mail.com" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Phone Number</label>
+                                                        <input type="text" name="phone" maxlength="11" class="form-control" placeholder="080XXXXXXXX" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Date of Birth</label>
+                                                        <input type="date" name="dob" class="form-control" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Username (Optional)</label>
+                                                        <input type="text" name="username" class="form-control" placeholder="Preferred handle" />
                                                     </div>
                                                 </div>
+                                            </div>
+
+                                            <div class="mb-4 text-start">
+                                                <h6 class="text-primary fw-bold mb-3">Location & Business Details</h6>
+                                                <div class="row g-3">
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">State</label>
+                                                        <input type="text" name="state" class="form-control" placeholder="e.g. Lagos" required />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">City</label>
+                                                        <input type="text" name="city" class="form-control" placeholder="e.g. Ikeja" required />
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class="form-label">LGA</label>
+                                                        <input type="text" name="lga" class="form-control" placeholder="Local Govt Area" required />
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class="form-label">Geo Zone</label>
+                                                        <select name="geo_zone" class="form-select" required>
+                                                            <option value="">Select Zone</option>
+                                                            <option value="North Central">North Central</option>
+                                                            <option value="North East">North East</option>
+                                                            <option value="North West">North West</option>
+                                                            <option value="South East">South East</option>
+                                                            <option value="South South">South South</option>
+                                                            <option value="South West">South West</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label class="form-label">Full Business Address</label>
+                                                        <textarea class="form-control" name="address" rows="2" placeholder="Complete office/business address" required></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="alert alert-info py-2 small mb-4 text-start">
+                                                <p class="mb-1"><i class="mdi mdi-information-outline"></i>
+
+                                                    <span class="fw-bold">Enrollment Fee: &#x20A6;{{ number_format($ServiceFee->amount, 2) }}</span>
 
                                             </div>
 
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mt-1 mb-2">
-                                                <h6>* Key Notes:</h6>
-                                                <small class="text-danger">Account Most be traditional bank
-                                                    account, not a fintech or digital banking account
-                                                </small><br />
-                                                <small class="text-danger fw-bold">Andriod Access only </small>
-                                                <p class="fw-bold"> Enrollment Fee:
-                                                    &#x20A6;{{ number_format($ServiceFee->amount), 2 }}</p>
-
+                                            <div class="text-center mt-4">
+                                                <button type="submit" id="submit" class="btn btn-primary btn-lg px-5">
+                                                    <i class="mdi mdi-send me-2"></i>Submit Agent Request
+                                                </button>
                                             </div>
-                                            <button type="submit" id="submit" name="submit"
-                                                class="btn btn-primary"><i class="las la-share"></i> Submit
-                                                Request</button>
                                         </form>
                                     </div>
-
                                 </div>
 
                             </div>

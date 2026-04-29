@@ -1,6 +1,6 @@
 @extends('layouts.dashboard')
 
-@section('title', 'IPE Clearance')
+@section('title', 'Modification IPE Clearance')
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" />
     <style>
@@ -39,7 +39,7 @@
                             <div class="mb-2">
                                 <h6 class="text-center text-uppercase text-muted fw-semibold mb-3"
                                     style="font-size: 0.85rem;">
-                                    Total IPE Clearance Requests
+                                    Total Modification IPE Clearance Requests
                                 </h6>
 
                                 <div class="row g-2 justify-content-center">
@@ -72,7 +72,7 @@
                                                 'bg' => '#f8d7da',
                                                 'text' => 'text-danger',
                                                 'border' => 'border-danger',
-                                             ],
+                                            ],
                                             [
                                                 'label' => 'Successful',
                                                 'value' => $resolved,
@@ -97,16 +97,16 @@
                             </div>
                         </div>
 
-                        <h4 class="card-title">IPE Clearance</h4>
-                        <p class="card-description">Modify the status of the request from this section.</p>
+                        <h4 class="card-title">Modification IPE Clearance</h4>
+                        <p class="card-description">Modify the status of the modification request from this section.</p>
 
                         {{-- <div class="d-flex justify-content-end mb-3 gap-2 flex-wrap">
                             @if($refund_count > 0)
-                                <a href="{{ route('admin.ipe.refund') }}" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to refund all failed transactions?')">
+                                <a href="{{ route('admin.modification.ipe.refund') }}" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to refund all failed modification transactions?')">
                                     <i class="ri-refresh-line"></i> Refund All Failed ({{ $refund_count }})
                                 </a>
                             @endif
-                            <a href="{{ route('admin.ipe.download-template') }}" class="btn btn-info btn-sm">
+                            <a href="{{ route('admin.modification.ipe.download-template') }}" class="btn btn-info btn-sm">
                                 <i class="ri-download-line"></i> Download Pending Template
                             </a>
                             <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#uploadExcelModal">
@@ -145,7 +145,7 @@
                                             @endif
                                             <div class="col-12  mb-3">
 
-                                                <form action="{{ route('admin.ipe.index') }}" method="GET">
+                                                <form action="{{ route('admin.modification.ipe.index') }}" method="GET">
                                                     <div class="row g-2">
                                                         <div class="col-md-3">
                                                             <input type="text" name="search" class="form-control"
@@ -250,7 +250,7 @@
                                                                     </td>
                                                                     <td>
                                                                         @if ($data->resp_code != '400')
-                                                                            <a href="{{ route('admin.ipe.view-request', $data->id) }}"
+                                                                            <a href="{{ route('admin.modification.ipe.view-request', $data->id) }}"
                                                                                 class="btn btn-primary btn-sm">
                                                                                 <i class="ri-eye-line"></i> View
                                                                             </a>
@@ -296,7 +296,7 @@
          <div class="modal-dialog modal-dialog-centered">
              <div class="modal-content border-0 shadow-sm">
                  <div class="modal-header bg-primary text-white">
-                     <h6 class="modal-title text-white">Reply IPE Clearance (<span id="modalTrackingId"></span>)</h6>
+                     <h6 class="modal-title text-white">Reply Modification IPE Clearance (<span id="modalTrackingId"></span>)</h6>
                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                  </div>
                  <div class="modal-body">
@@ -362,7 +362,7 @@
                     document.getElementById('modalTrackingId').textContent = tracking;
                     document.getElementById('requestId').value = id;
                     document.getElementById('trxAmount').value = trxAmount;
-                    document.getElementById('replyForm').setAttribute('action', '/admin/requests/ipe/' + id + '/update-status');
+                    document.getElementById('replyForm').setAttribute('action', '/admin/requests/modification-ipe/' + id + '/update-status');
 
                     quill.root.innerHTML = '';
                 });

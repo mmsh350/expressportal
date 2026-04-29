@@ -95,10 +95,34 @@
                         <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed below the tracking number on the IPE form for users.</small>
                     </div>
 
-                    <div>
+                    <div class="mb-4">
                         <label for="bvn_notice" class="form-label fw-semibold">BVN Retrieval Notice</label>
                         <textarea name="bvn_notice" id="bvn_notice" class="form-control bg-light border-0 px-3 py-2" rows="3" placeholder="Enter the notice message to display on the BVN Retrieval page...">{{ old('bvn_notice', $settings->bvn_notice ?? '') }}</textarea>
                         <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed on the BVN Retrieval form for users.</small>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="modification_ipe_notice" class="form-label fw-semibold">Modification IPE Service Notice</label>
+                        <textarea name="modification_ipe_notice" id="modification_ipe_notice" class="form-control bg-light border-0 px-3 py-2" rows="3" placeholder="Enter the notice message to display on the Modification IPE request page...">{{ old('modification_ipe_notice', $settings->modification_ipe_notice ?? '') }}</textarea>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed below the tracking number on the Modification IPE form for users.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="bvn_enrollment_notice" class="form-label fw-semibold">BVN Enrollment Service Notice</label>
+                        <textarea name="bvn_enrollment_notice" id="bvn_enrollment_notice" class="form-control bg-light border-0 px-3 py-2" rows="3" placeholder="Enter the notice message to display on the BVN Enrollment request page...">{{ old('bvn_enrollment_notice', $settings->bvn_enrollment_notice ?? '') }}</textarea>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed at the top of the BVN Enrollment request form for users.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="email_retrieval_notice" class="form-label fw-semibold">Email Retrieval Service Notice</label>
+                        <textarea name="email_retrieval_notice" id="email_retrieval_notice" class="form-control bg-light border-0 px-3 py-2" rows="3" placeholder="Enter the notice message to display on the Email Retrieval request page...">{{ old('email_retrieval_notice', $settings->email_retrieval_notice ?? '') }}</textarea>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed at the top of the Email Retrieval request form for users.</small>
+                    </div>
+
+                    <div>
+                        <label for="nimc_license_price" class="form-label fw-semibold">NIMC License Price</label>
+                        <input type="text" name="nimc_license_price" id="nimc_license_price" class="form-control bg-light border-0 px-3 py-2" placeholder="e.g. 180,000" value="{{ old('nimc_license_price', $settings->nimc_license_price ?? '180,000') }}">
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-currency-ngn me-1 text-success"></i>Enter the price for the NIMC License (including commas if desired). This will be shown on the dashboard and modal.</small>
                     </div>
                 </div>
             </div>

@@ -48,6 +48,10 @@ class SiteSettingController extends Controller
             'delink_notice' => 'nullable|string',
             'ipe_notice' => 'nullable|string',
             'bvn_notice' => 'nullable|string',
+            'modification_ipe_notice' => 'nullable|string',
+            'bvn_enrollment_notice' => 'nullable|string',
+            'email_retrieval_notice' => 'nullable|string',
+            'nimc_license_price' => 'nullable|string',
         ]);
 
         // For each checkbox, set 1 if present, 0 if missing

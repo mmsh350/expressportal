@@ -23,5 +23,9 @@ class SiteSetting extends Model
         'delink_notice',
         'ipe_notice',
         'bvn_notice',
+        'modification_ipe_notice',
+        'bvn_enrollment_notice',
+        'email_retrieval_notice',
+        'nimc_license_price',
     ];
 }

@@ -112,7 +112,11 @@
 
                                     <div class="px-2">
                                         <small class="font-italic text-danger d-block">
-                                            Please note that this request can take up to 5 working days to be processed. We appreciate your patience.
+                                            @if($settings->email_retrieval_notice)
+                                                {!! $settings->email_retrieval_notice !!}
+                                            @else
+                                                Please note that this request can take up to 5 working days to be processed. We appreciate your patience.
+                                            @endif
                                         </small>
                                     </div>
                                 </div>
@@ -205,7 +209,6 @@
                                                     <th width="5%">ID</th>
                                                     <th>Date</th>
                                                     <th>NIN Number</th>
-                                                    <th>Email</th>
                                                     <th>Service Type</th>
                                                     <th class="text-center">Status</th>
                                                     <th>Response</th>
@@ -217,7 +220,6 @@
                                                         <th>{{ $serialNumber++ }}</th>
                                                         <td>{{ $data->created_at }}</td>
                                                         <td>{{ $data->nin_number }}</td>
-                                                        <td>{{ $data->email }}</td>
                                                         <td>{{ $data->description }}</td>
                                                         <td class="text-center">
                                                             @if ($data->status == 'Successful')
@@ -235,7 +237,18 @@
                                                         </td>
 
 
-                                                        <td>{!! $data->reason !!}</td>
+                                                        <td>
+                                                            @if (strlen(strip_tags($data->reason)) > 50)
+                                                                {!! Str::limit(strip_tags($data->reason), 50) !!}
+                                                                <a href="javascript:void(0)" class="text-primary fw-bold ms-1"
+                                                                    data-bs-toggle="modal" data-bs-target="#reason"
+                                                                    data-reason="{{ $data->reason }}">
+                                                                    Show All
+                                                                </a>
+                                                            @else
+                                                                {!! $data->reason !!}
+                                                            @endif
+                                                        </td>
 
                                                     </tr>
                                                 @endforeach
@@ -263,7 +276,7 @@
             <div class="modal fade" id="reason" tabindex="-1" aria-labelledby="reason" data-bs-keyboard="true"
                 aria-hidden="true">
                 <!-- Scrollable modal -->
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="staticBackdropLabel2">Support
@@ -322,8 +335,8 @@
                         inputs += createInput('nin', 'Enter NIN Number', 11, 'text', '^\\d{11}$',
                             'NIN must be 11 digits');
 
-                        inputs += createInput('email', 'Enter Email Address (Optional)', 60, 'email', '',
-                            'Email must be a valid email address', '');
+                      //  inputs += createInput('email', 'Enter Email Address (Optional)', 60, 'email', '',
+                      //      'Email must be a valid email address', '');
                         break;
                     default:
                         break;

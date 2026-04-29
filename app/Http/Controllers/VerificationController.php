@@ -43,11 +43,31 @@ class VerificationController extends Controller
         $ServiceFee = $services->get('112') ?? 0.00;
 
         $ipes = IpeRequest::where('user_id',  $this->loginId)
+            ->whereNull('tag')
             ->orderBy('id', 'desc')
             ->paginate(5);
 
 
         return view('verification.ipe', compact('ServiceFee',  'ipes'));
+    }
+
+    public function showModificationIpe()
+    {
+        $serviceCodes = ['135'];
+        $services = Service::whereIn('service_code', $serviceCodes)
+            ->get()
+            ->keyBy('service_code');
+
+        // Extract specific service fees
+        $ServiceFee = $services->get('135') ?? 0.00;
+
+        $ipes = IpeRequest::where('user_id',  $this->loginId)
+            ->where('tag', 'MODIFICATION')
+            ->orderBy('id', 'desc')
+            ->paginate(5);
+
+
+        return view('verification.modification-ipe', compact('ServiceFee',  'ipes'));
     }
     public function showNinValidation()
     {
@@ -712,6 +732,16 @@ class VerificationController extends Controller
 
     public function ipeRequest(Request $request)
     {
+        return $this->ipeRequestBase($request, '112', null, 'user.ipe', 'IPE Request Successful', 'IPE Request');
+    }
+
+    public function modificationIpeRequest(Request $request)
+    {
+        return $this->ipeRequestBase($request, '135', 'MODIFICATION', 'user.modification-ipe', 'Modification IPE Request Successful', 'Modification IPE Request');
+    }
+
+    private function ipeRequestBase(Request $request, $serviceCode, $tag, $redirectRoute, $successMessage, $description)
+    {
         $request->validate([
             'trackingId' => 'required|alpha_num|size:15',
         ]);
@@ -719,12 +749,12 @@ class VerificationController extends Controller
         //NIN Services Fee
         $ServiceFee = 0;
 
-        $ServiceFee = Service::where('service_code', '112')
+        $ServiceFee = Service::where('service_code', $serviceCode)
             ->where('status', 'enabled')
             ->first();
 
         if (!$ServiceFee)
-            return redirect()->route('user.ipe')
+            return redirect()->route($redirectRoute)
                 ->with('error', 'Sorry Action not Allowed !');
 
         $ServiceFee = $ServiceFee->amount;
@@ -734,11 +764,10 @@ class VerificationController extends Controller
         //Check if wallet is funded
         $wallet = Wallet::where('user_id', $loginUserId)->first();
         $wallet_balance = $wallet->balance;
-        $balance = 0;
 
         if ($wallet_balance < $ServiceFee) {
 
-            return redirect()->route('user.ipe')
+            return redirect()->route($redirectRoute)
                 ->with('error', 'Sorry Wallet Not Sufficient for Transaction !');
         } else {
 
@@ -751,17 +780,17 @@ class VerificationController extends Controller
 
                     $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($ServiceFee, 2);
 
-                    $trx_id = $this->transactionService->createTransaction($loginUserId, $ServiceFee, 'IPE Request', $serviceDesc,  'Wallet', 'Approved');
+                    $trx_id = $this->transactionService->createTransaction($loginUserId, $ServiceFee, $description, $serviceDesc,  'Wallet', 'Approved');
                     $refno = $trx_id->referenceId;
 
-                    $this->processResponseDataIpe($loginUserId, $request->input('trackingId'), $trx_id->id, $refno);
+                    $this->processResponseDataIpe($loginUserId, $request->input('trackingId'), $trx_id->id, $refno, $tag);
 
-                    return redirect()->route('user.ipe')
-                        ->with('success', "IPE Request Successful");
+                    return redirect()->route($redirectRoute)
+                        ->with('success', $successMessage);
 
             } catch (\Exception $e) {
-                return redirect()->route('user.ipe')
-                    ->with('error', 'An error occurred while making the IPE request');
+                return redirect()->route($redirectRoute)
+                    ->with('error', 'An error occurred while making the request');
             }
         }
     }
@@ -889,6 +918,8 @@ class VerificationController extends Controller
                     'consent' => true,
                     'slipType' => 'standard',
                 ];
+
+
 
                 $url = config('services.verify_user.base_url') . '/api/bvn/index.php';
                 $token = config('services.verify_user.token');
@@ -1288,7 +1319,7 @@ class VerificationController extends Controller
         }
     }
 
-    public function processResponseDataIpe($userId, $trackingNo,$tnxId, $refno)
+    public function processResponseDataIpe($userId, $trackingNo,$tnxId, $refno, $tag = null)
     {
         try {
             IpeRequest::create([
@@ -1296,6 +1327,7 @@ class VerificationController extends Controller
                 'trackingId' => $trackingNo,
                 'tnx_id' => $tnxId,
                 'refno' => $refno,
+                'tag' => $tag,
             ]);
         } catch (\Exception $e) {
 

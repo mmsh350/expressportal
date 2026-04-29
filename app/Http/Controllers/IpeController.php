@@ -24,15 +24,31 @@ class IpeController extends Controller
 
     public function ipeIndex(Request $request)
     {
+        return $this->ipeIndexBase($request, null, 'admin.ipe-index');
+    }
 
-        $counts = IpeRequest::selectRaw("
+    public function modificationIpeIndex(Request $request)
+    {
+        return $this->ipeIndexBase($request, 'MODIFICATION', 'admin.modification-ipe-index');
+    }
+
+    private function ipeIndexBase(Request $request, $tag, $view)
+    {
+        $countsQuery = IpeRequest::where('tag', $tag);
+        if (is_null($tag)) {
+            $countsQuery = IpeRequest::whereNull('tag');
+        }
+
+        $counts = $countsQuery->selectRaw("
         COUNT(*) as total_request,
-        SUM(CASE WHEN resp_code IN ('100','101') THEN 1 ELSE 0 END) as pending,
+        SUM(CASE WHEN resp_code = '100' THEN 1 ELSE 0 END) as pending,
+        SUM(CASE WHEN resp_code = '101' THEN 1 ELSE 0 END) as processing,
         SUM(CASE WHEN resp_code = '200' THEN 1 ELSE 0 END) as resolved,
         SUM(CASE WHEN resp_code = '400' THEN 1 ELSE 0 END) as rejected")
             ->first();
 
         $pending = $counts->pending ?? 0;
+        $processing = $counts->processing ?? 0;
         $resolved = $counts->resolved ?? 0;
         $rejected = $counts->rejected ?? 0;
         $total_request = $counts->total_request ?? 0;
@@ -43,7 +59,10 @@ class IpeController extends Controller
         $dateFrom = $request->input('date_from');
         $dateTo = $request->input('date_to');
 
-        $ipeRequestsQuery = IpeRequest::whereNull('tag');
+        $ipeRequestsQuery = IpeRequest::where('tag', $tag);
+        if (is_null($tag)) {
+            $ipeRequestsQuery = IpeRequest::whereNull('tag');
+        }
 
         if ($search) {
             $ipeRequestsQuery->where(function ($query) use ($search) {
@@ -79,12 +98,21 @@ class IpeController extends Controller
             'updated_at'
         )->paginate($perPage)->withQueryString();
 
-         $refund_count = IpeRequest::where('resp_code', '400')
+        $refund_count_query = IpeRequest::where('resp_code', '400')
             ->whereNull('refunded_at')
-            ->count();
+            ->where('tag', $tag);
+        
+        if (is_null($tag)) {
+            $refund_count_query = IpeRequest::where('resp_code', '400')
+                ->whereNull('refunded_at')
+                ->whereNull('tag');
+        }
 
-        return view('admin.ipe-index', compact(
+        $refund_count = $refund_count_query->count();
+
+        return view($view, compact(
             'pending',
+            'processing',
             'resolved',
             'rejected',
             'total_request',
@@ -95,9 +123,25 @@ class IpeController extends Controller
 
     public function downloadTemplateIPE()
     {
-        $records = IpeRequest::whereIn('resp_code', ['100', '101'])
-            ->whereNull('tag')
-            ->select('id', 'trackingId', 'resp_code', 'reply')
+        return $this->downloadTemplateBase(null);
+    }
+
+    public function downloadTemplateModificationIPE()
+    {
+        return $this->downloadTemplateBase('MODIFICATION');
+    }
+
+    private function downloadTemplateBase($tag)
+    {
+        $query = IpeRequest::whereIn('resp_code', ['100', '101'])
+            ->where('tag', $tag);
+        
+        if (is_null($tag)) {
+            $query = IpeRequest::whereIn('resp_code', ['100', '101'])
+                ->whereNull('tag');
+        }
+
+        $records = $query->select('id', 'trackingId', 'resp_code', 'reply')
             ->get();
 
         if ($records->isEmpty()) {
@@ -109,13 +153,25 @@ class IpeController extends Controller
         IpeRequest::whereIn('id', $ids)
             ->update(['resp_code' => '101']);
 
+        $filename = ($tag ? strtolower($tag).'_' : '').'ipe_requests_pending_'.now()->format('Y_m_d_His').'.xlsx';
+
         return Excel::download(
             new IpeTemplateExport($records),
-            'ipe_requests_pending_'.now()->format('Y_m_d_His').'.xlsx'
+            $filename
         );
     }
 
     public function uploadExcelIPE(Request $request)
+    {
+        return $this->uploadExcelBase($request, null);
+    }
+
+    public function uploadExcelModificationIPE(Request $request)
+    {
+        return $this->uploadExcelBase($request, 'MODIFICATION');
+    }
+
+    private function uploadExcelBase(Request $request, $tag)
     {
         try {
             // Validate uploaded file
@@ -166,11 +222,19 @@ class IpeController extends Controller
                 }
 
                 $respCode == '200' ? $st = 'successful' : $st = 'failed';
+                
+                $updateQuery = IpeRequest::where('trackingId', $trackingId)
+                    ->where('tag', $tag)
+                    ->where('resp_code', '101');
+                
+                if (is_null($tag)) {
+                    $updateQuery = IpeRequest::where('trackingId', $trackingId)
+                        ->whereNull('tag')
+                        ->where('resp_code', '101');
+                }
+
                 // Perform update
-                $updated = IpeRequest::where('trackingId', $trackingId)
-                    ->whereNull('tag')
-                    ->where('resp_code', '101')
-                    ->update([
+                $updated = $updateQuery->update([
                         'resp_code' => $respCode,
                         'reply' => $reply,
                         'status' => $st,
@@ -204,9 +268,27 @@ class IpeController extends Controller
 
     public function refundFailedTransactions()
     {
-        $failedRequests = IpeRequest::where('resp_code', '400')
+        return $this->refundFailedBase(null);
+    }
+
+    public function refundFailedModificationTransactions()
+    {
+        return $this->refundFailedBase('MODIFICATION');
+    }
+
+    private function refundFailedBase($tag)
+    {
+        $query = IpeRequest::where('resp_code', '400')
             ->whereNull('refunded_at')
-            ->get();
+            ->where('tag', $tag);
+        
+        if (is_null($tag)) {
+            $query = IpeRequest::where('resp_code', '400')
+                ->whereNull('refunded_at')
+                ->whereNull('tag');
+        }
+
+        $failedRequests = $query->get();
 
         $refunded = 0;
         foreach ($failedRequests as $request) {
@@ -214,12 +296,6 @@ class IpeController extends Controller
             $success = $this->processRefund($request);
 
             if ($success) {
-
-                IpeRequest::where('trackingId', $request->tracking_id)
-                    ->update([
-                        'refunded_at' => Carbon::now(),
-                    ]);
-
                 $refunded++;
             }
         }
@@ -272,9 +348,27 @@ class IpeController extends Controller
         ]);
     }
 
+    public function showModificationIpeRequest($id)
+    {
+        $requests = IpeRequest::with(['transaction', 'user'])->findOrFail($id);
+        return view('admin.view-modification-ipe-request', [
+            'requests' => $requests,
+            'request_type' => 'Modification IPE Services'
+        ]);
+    }
+
     public function updateIpeStatus(Request $request, $id)
     {
-        
+        return $this->updateIpeStatusBase($request, $id, 'admin.ipe.index');
+    }
+
+    public function updateModificationIpeStatus(Request $request, $id)
+    {
+        return $this->updateIpeStatusBase($request, $id, 'admin.modification.ipe.index');
+    }
+
+    private function updateIpeStatusBase(Request $request, $id, $redirectRoute)
+    {
         $refundKey = $request->has('refundAmount') ? 'refundAmount' : 'refund_amount';
 
         $request->validate([
@@ -301,7 +395,7 @@ class IpeController extends Controller
         }
 
         if ($newStatus == '400') {
-            return redirect()->route('admin.ipe.index')->with('success', 'Status updated to Failed and refund processed successfully.');
+            return redirect()->route($redirectRoute)->with('success', 'Status updated to Failed and refund processed successfully.');
         }
 
         return redirect()->back()->with('success', 'Status updated successfully.');

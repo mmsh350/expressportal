@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\BvnPhoneSearch;
+use App\Models\Enrollment;
 use App\Models\IpeRequest;
 use App\Models\NinValidation;
+use App\Models\Popup;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
@@ -76,7 +78,13 @@ class DashboardController extends Controller
 
             $totalWalletBalance = DB::table('wallets')->selectRaw('SUM(balance) as total')->value('total');
             $totalBonusBalance = DB::table('bonus_histories')->selectRaw('SUM(amount) as total')->value('total');
-            $ipePending = IpeRequest::whereIn('resp_code', ['100', '101'])->count();
+            $ipePending = IpeRequest::whereIn('resp_code', ['100', '101'])
+                ->whereNull('tag')->count();
+
+            $modificationIpePending = IpeRequest::whereIn('resp_code', ['100', '101'])
+                ->where('tag', 'MODIFICATION')->count();
+
+            $bvnEnrollmentCount = Enrollment::whereIn('status', ['submitted', 'processing'])->count();
 
             $metrics = [
                 [
@@ -151,6 +159,20 @@ class DashboardController extends Controller
                     'bg' => 'dark',
                     'href' => 'admin.email.retrive.list',
                 ],
+                [
+                    'title' => 'Modification IPE',
+                    'value' => number_format($modificationIpePending),
+                    'icon' => 'bi-pencil-square',
+                    'bg' => 'warning',
+                    'href' => 'admin.modification.ipe.index',
+                ],
+                [
+                    'title' => 'BVN Agent',
+                    'value' => number_format($bvnEnrollmentCount),
+                    'icon' => 'bi-person-plus-fill',
+                    'bg' => 'success',
+                    'href' => 'admin.enroll.index',
+                ],
             ];
 
             $depositChartData = [
@@ -192,13 +214,14 @@ class DashboardController extends Controller
                 ->get();
 
         }
-
+$popup = Popup::where('is_active', true)->first();
         return view('user.dashboard', [
             'kycPending' => $kycPending,
             'status' =>   $status,
             'metrics' => $metrics ?? null,
             'depositChartData' => $depositChartData ?? null,
             'topFunders' => $topFunders ?? collect(),
+             'popup' => $popup,
         ]);
     }
 }

@@ -205,7 +205,6 @@
                                                     <th width="5%">ID</th>
                                                     <th>Date</th>
                                                     <th>NIN Number</th>
-                                                    <th>Email</th>
                                                     <th>Service Type</th>
                                                     <th class="text-center">Status</th>
                                                     <th>Response</th>
@@ -217,7 +216,6 @@
                                                         <th>{{ $serialNumber++ }}</th>
                                                         <td>{{ $data->created_at }}</td>
                                                         <td>{{ $data->nin_number }}</td>
-                                                        <td>{{ $data->email }}</td>
                                                         <td>{{ $data->description }}</td>
                                                         <td class="text-center">
                                                             @if ($data->status == 'Successful')
@@ -235,7 +233,18 @@
                                                         </td>
 
 
-                                                        <td>{!! $data->reason !!}</td>
+                                                        <td>
+                                                            @if (strlen(strip_tags($data->reason)) > 50)
+                                                                {!! Str::limit(strip_tags($data->reason), 50) !!}
+                                                                <a href="javascript:void(0)" class="text-primary fw-bold ms-1"
+                                                                    data-bs-toggle="modal" data-bs-target="#reason"
+                                                                    data-reason="{{ $data->reason }}">
+                                                                    Show All
+                                                                </a>
+                                                            @else
+                                                                {!! $data->reason !!}
+                                                            @endif
+                                                        </td>
 
                                                     </tr>
                                                 @endforeach
@@ -263,7 +272,7 @@
             <div class="modal fade" id="reason" tabindex="-1" aria-labelledby="reason" data-bs-keyboard="true"
                 aria-hidden="true">
                 <!-- Scrollable modal -->
-                <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h6 class="modal-title" id="staticBackdropLabel2">Support

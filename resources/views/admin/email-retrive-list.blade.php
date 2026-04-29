@@ -177,7 +177,6 @@
                                             <th>Date</th>
                                             <th>Reference Number</th>
                                             <th>NIN No.</th>
-                                            <th>Email</th>
                                             <th>Reason</th>
                                             <th>Amount</th>
                                             <th>Status</th>
@@ -191,7 +190,6 @@
                                                 <td> {{ $service->created_at->format('d M Y') }}</td>
                                                 <td>{{ $service->refno }}</td>
                                                 <td>{{ $service->nin_number }}</td>
-                                                <td>{{ $service->email }}</td>
                                                 <td>{{ $service->description }}</td>
                                                 <td>₦ {{ $service->transactions->amount ?? 0 }}</td>
                                                 <td>

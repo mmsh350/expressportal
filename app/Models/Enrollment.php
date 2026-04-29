@@ -7,9 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 class Enrollment extends Model
 {
     protected $table = 'bvn_enrollments';
+
     protected $fillable = [
         'user_id',
         'refno',
+        'agent_location',
+        'first_name',
+        'last_name',
+        'dob',
+        'geo_zone',
+        'kegow_account',
         'fullname',
         'state',
         'lga',
@@ -24,5 +31,17 @@ class Enrollment extends Model
         'username',
         'status',
         'reason',
+        'tnx_id',
+        'refunded_at',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function transactions()
+    {
+        return $this->belongsTo(Transaction::class, 'tnx_id');
+    }
 }

@@ -123,70 +123,184 @@
             /* Darker blue on hover */
         }
 
-        /* Premium Service Cards Redesign */
+        /* Advanced Premium Design System */
+        :root {
+            --primary-blue: #1e40af;
+            --primary-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+            --card-shadow-hover: 0 25px 50px -12px rgba(30, 64, 175, 0.15);
+        }
+
         .service-card {
-            border-radius: 1.25rem !important;
-            border: 1px solid rgba(0,0,0,0.03) !important;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            background: #ffffff;
+            border-radius: 1.5rem !important;
+            border: none !important;
+            background: var(--glass-bg) !important;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
             height: 100%;
+            overflow: hidden;
+            box-shadow: var(--card-shadow) !important;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
         }
+
         .service-card:hover {
-            transform: translateY(-5px) !important;
-            box-shadow: 0 15px 30px -5px rgba(30, 64, 175, 0.1), 0 10px 15px -5px rgba(0, 0, 0, 0.04) !important;
-            border-color: rgba(30, 64, 175, 0.15) !important;
+            transform: translateY(-10px) scale(1.02) !important;
+            box-shadow: var(--card-shadow-hover) !important;
+            border-color: rgba(30, 64, 175, 0.3) !important;
+            background: #ffffff !important;
         }
+
+        .service-card.disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+            filter: grayscale(0.7);
+        }
+
+        .service-card.disabled:hover {
+            transform: none !important;
+            box-shadow: var(--card-shadow) !important;
+        }
+
         .service-icon-wrapper {
             width: 72px;
             height: 72px;
             background: #f8fafc;
-            border-radius: 50%;
+            border-radius: 1.25rem;
             display: flex;
             align-items: center;
             justify-content: center;
             margin: 0 auto 1.25rem auto;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(0,0,0,0.02);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.04);
         }
+
         .service-card:hover .service-icon-wrapper {
-            background: #eff6ff;
-            transform: scale(1.08);
-            box-shadow: 0 0 0 6px rgba(239, 246, 255, 0.5);
+            transform: scale(1.15) rotate(8deg);
+            background: white;
+            box-shadow: 0 10px 20px rgba(30, 64, 175, 0.1);
         }
+
         .service-icon-wrapper img {
             max-width: 38px;
             max-height: 38px;
             object-fit: contain;
-            transition: all 0.3s ease;
         }
+
         .service-card-title {
             font-size: 0.95rem;
+            font-weight: 800;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.01em;
+        }
+
+        /* Premium Version Pills (Squared) */
+        .version-pills {
+            background: #ffffff;
+            padding: 5px;
+            border-radius: 4px;
+            display: inline-flex;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .version-pills .nav-link {
+            border-radius: 4px !important;
+            padding: 10px 28px !important;
             font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 0;
-            line-height: 1.3;
-            transition: color 0.3s ease;
+            font-size: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            color: #64748b !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none !important;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            position: relative;
         }
-        .service-card:hover .service-card-title {
-            color: #1e40af;
+
+        .version-pills .nav-link:hover:not(.active) {
+            color: #1e40af !important;
+            background: #f8fafc;
+            transform: scale(1.02);
         }
-        
+
+        .version-pills .nav-link.active {
+            background: #1e40af !important;
+            color: white !important;
+            box-shadow: 0 10px 15px -3px rgba(30, 64, 175, 0.25);
+        }
+
+        /* Status Badges */
+        .coming-soon-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            background: #e2e8f0;
+            color: #475569;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 2;
+        }
+
+        .card-new-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            background: #fef3c7;
+            color: #d97706;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            z-index: 2;
+        }
+
+        /* Animations */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-pane.active .col-6 {
+            animation: slideUpFade 0.5s ease forwards;
+        }
+
+        .tab-pane.active .col-6:nth-child(1) { animation-delay: 0.05s; }
+        .tab-pane.active .col-6:nth-child(2) { animation-delay: 0.1s; }
+        .tab-pane.active .col-6:nth-child(3) { animation-delay: 0.15s; }
+        .tab-pane.active .col-6:nth-child(4) { animation-delay: 0.2s; }
+        .tab-pane.active .col-6:nth-child(5) { animation-delay: 0.25s; }
+
         @media (max-width: 576px) {
             .service-icon-wrapper {
-                width: 60px;
-                height: 60px;
-                margin-bottom: 0.75rem;
-            }
-            .service-icon-wrapper img {
-                max-width: 32px;
-                max-height: 32px;
+                width: 65px;
+                height: 65px;
             }
             .service-card-title {
-                font-size: 0.85rem;
+                font-size: 0.9rem;
             }
             .service-card {
-                padding: 1rem !important;
+                padding: 1.25rem !important;
             }
+        }
+
+        /* Remove border from tab content */
+        .tab-content {
+            border: none !important;
+            padding: 0 !important;
         }
     </style>
 @endpush
@@ -285,138 +399,329 @@
             @endif
             <div class="row">
                 <!-- Left side column containing the icons -->
-                <div class="col-lg-12 col-12 col-md-6">
-                    <div class="container py-3" style="max-width: 100%">
-                        <h4 class="fw-light mb-4 text-center">Our Services</h4>
-                        <div class="row g-3 g-md-4 justify-content-center">
+                <div class="col-lg-12 col-12">
+                    <div class="container py-4" style="max-width: 100%">
 
-                            <!-- Verify NIN -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
-                                    </div>
-                                    <h5 class="service-card-title text-center">Verify NIN</h5>
-                                    <a href="{{ route('user.verify-nin') }}" class="stretched-link"></a>
+                        <!-- NIN Services Section -->
+                        <div class="mb-5">
+                            <div class="section-header mb-4">
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0">NIN Services</h4>
                                 </div>
                             </div>
 
-                            <!-- Verify NIN Phone -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                            <!-- Sub-category: Verification -->
+                            <div class="mb-5">
+                                <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap">
+                                    <div class="d-flex align-items-center">
+                                        <h6 class="text-primary fw-bold text-uppercase mb-0" style="font-size: 0.8rem; letter-spacing: 0.1em;">Verification Services</h6>
                                     </div>
-                                    <h5 class="service-card-title text-center">Verify NIN Phone</h5>
-                                    <a href="{{ route('user.verify-nin-phone') }}" class="stretched-link"></a>
+
+                                    <!-- Version Toggle -->
+                                    <ul class="nav nav-pills version-pills mt-3 mt-md-0" id="verificationTabs" role="tablist">
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link active" id="v1-tab" data-bs-toggle="pill" data-bs-target="#v1-content" type="button" role="tab">Version 1</button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="v2-tab" data-bs-toggle="pill" data-bs-target="#v2-content" type="button" role="tab">Version 2 <small class="ms-1 opacity-75">(Soon)</small></button>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <button class="nav-link" id="v3-tab" data-bs-toggle="pill" data-bs-target="#v3-content" type="button" role="tab">Version 3 <small class="ms-1 opacity-75">(Soon)</small></button>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div class="tab-content" id="verificationTabsContent">
+                                    <!-- Version 1 Content -->
+                                    <div class="tab-pane fade show active" id="v1-content" role="tabpanel">
+                                        <div class="row g-3 g-md-4">
+                                            <!-- Verify NIN (v1) -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card position-relative p-4 text-center">
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">NIN Verify</h5>
+                                                    <p class="text-muted small mb-0">Instant NIN details</p>
+                                                    <a href="{{ route('user.verify-nin') }}" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- NIN Phone (v1) -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card position-relative p-4 text-center">
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">NIN Phone</h5>
+                                                    <p class="text-muted small mb-0">Instant NIN Search by phone</p>
+                                                    <a href="{{ route('user.verify-nin-phone') }}" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- Demographics (v1) -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card position-relative p-4 text-center">
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">Demographics</h5>
+                                                    <p class="text-muted small mb-0">Instant Demographic Search</p>
+                                                    <a href="{{ route('user.verify-demo') }}" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Version 2 Content -->
+                                    <div class="tab-pane fade" id="v2-content" role="tabpanel">
+                                        <div class="row g-3 g-md-4">
+                                            <!-- NIN Verify v2 -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card disabled position-relative p-4 text-center">
+                                                    <span class="coming-soon-badge">Soon</span>
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">NIN Verify</h5>
+                                                    <p class="text-muted small mb-0">Instant NIN details</p>
+                                                    <a href="javascript:void(0)" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- NIN Phone v2 -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card disabled position-relative p-4 text-center">
+                                                    <span class="coming-soon-badge">Soon</span>
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">NIN Phone</h5>
+                                                    <p class="text-muted small mb-0">Instant NIN Search by phone</p>
+                                                    <a href="javascript:void(0)" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- Demographics v2 -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card disabled position-relative p-4 text-center">
+                                                    <span class="coming-soon-badge">Soon</span>
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">Demographics</h5>
+                                                    <p class="text-muted small mb-0">Instant Demographics Search</p>
+                                                    <a href="javascript:void(0)" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Version 3 Content -->
+                                    <div class="tab-pane fade" id="v3-content" role="tabpanel">
+                                        <div class="row g-3 g-md-4">
+                                            <!-- NIN Verify v2 -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card disabled position-relative p-4 text-center">
+                                                    <span class="coming-soon-badge">Soon</span>
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">NIN Verify</h5>
+                                                    <p class="text-muted small mb-0">Instant NIN details</p>
+                                                    <a href="javascript:void(0)" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- NIN Phone v2 -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card disabled position-relative p-4 text-center">
+                                                    <span class="coming-soon-badge">Soon</span>
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">NIN Phone</h5>
+                                                    <p class="text-muted small mb-0">Instant NIN Search by phone</p>
+                                                    <a href="javascript:void(0)" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+
+                                            <!-- Demographics v2 -->
+                                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                                <div class="card service-card disabled position-relative p-4 text-center">
+                                                    <span class="coming-soon-badge">Soon</span>
+                                                    <div class="service-icon-wrapper">
+                                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                                    </div>
+                                                    <h5 class="service-card-title">Demographics</h5>
+                                                    <p class="text-muted small mb-0">Instant Demographics Search</p>
+                                                    <a href="javascript:void(0)" class="stretched-link"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <!-- Verify NIN Demographic -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
-                                    </div>
-                                    <h5 class="service-card-title text-center">Verify NIN Demographic</h5>
-                                    <a href="{{ route('user.verify-demo') }}" class="stretched-link"></a>
+                            <!-- Sub-category: Management & Clearance -->
+                            <div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <h6 class="text-primary fw-bold text-uppercase mb-0" style="font-size: 0.75rem; letter-spacing: 0.05em;">Other NIN Services</h6>
+                                    <div class="ms-3 flex-grow-1 border-bottom opacity-5"></div>
                                 </div>
-                            </div>
+                                <div class="row g-3 g-md-4">
+                                    <!-- IPE Clearance -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                            </div>
+                                            <h5 class="service-card-title">IPE Clearance</h5>
+                                            <p class="text-muted small mb-0">Process IPE Clearance</p>
+                                            <a href="{{ route('user.ipe') }}" class="stretched-link"></a>
+                                        </div>
+                                    </div>
 
-                            <!-- IPE Clearance -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                    <!-- Modification IPE -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                            </div>
+                                            <h5 class="service-card-title">Modification IPE</h5>
+                                            <p class="text-muted small mb-0">Process Modification IPE</p>
+                                            <a href="{{ route('user.modification-ipe') }}" class="stretched-link"></a>
+                                        </div>
                                     </div>
-                                    <h5 class="service-card-title text-center">IPE Clearance</h5>
-                                    <a href="{{ route('user.ipe') }}" class="stretched-link"></a>
-                                </div>
-                            </div>
 
-                            <!-- Verify BVN -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
+                                    <!-- NIN Validation -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                            </div>
+                                            <h5 class="service-card-title">Validation</h5>
+                                            <p class="text-muted small mb-0">NIN Validation Request</p>
+                                            <a href="{{ route('user.nin-validation')}}" class="stretched-link"></a>
+                                        </div>
                                     </div>
-                                    <h5 class="service-card-title text-center">Verify BVN</h5>
-                                    <a href="{{ route('user.verify-bvn') }}" class="stretched-link"></a>
-                                </div>
-                            </div>
 
-                             <!-- BVN RETRIVAL -->
-                             <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
+                                    <!-- NIN Delinking -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <span class="card-new-badge">Hot</span>
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                            </div>
+                                            <h5 class="service-card-title">NIN Delinking</h5>
+                                            <p class="text-muted small mb-0">Unlink Device</p>
+                                            <a href="{{ route('user.nin.delink')}}" class="stretched-link"></a>
+                                        </div>
                                     </div>
-                                    <h5 class="service-card-title text-center">BVN RETRIVAL</h5>
-                                    <a href="{{ route('user.bvn-phone-search') }}" class="stretched-link"></a>
-                                </div>
-                            </div>
 
-                            <!-- Personalize -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                    <!-- Email Retrieval -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <span class="card-new-badge">New</span>
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                            </div>
+                                            <h5 class="service-card-title">Email Retrieval</h5>
+                                            <p class="text-muted small mb-0">Recover linked email</p>
+                                            <a href="{{ route('user.email.retrive')}}" class="stretched-link"></a>
+                                        </div>
                                     </div>
-                                    <h5 class="service-card-title text-center">Personalize</h5>
-                                    <a href="{{ route('user.personalize-nin') }}" class="stretched-link"></a>
-                                </div>
-                            </div>
 
-                            <!-- Instant Validation -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                    <!-- NIMC License -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <span class="card-new-badge" style="background: #dcfce7; color: #166534;">Price {{ $settings->nimc_license_price ?? '180,000' }}</span>
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                            </div>
+                                            <h5 class="service-card-title">NIMC License</h5>
+                                            <p class="text-muted small mb-0">Enrollment License</p>
+                                            <a href="#" data-bs-toggle="modal" data-bs-target="#nimcLicenseModal" class="stretched-link"></a>
+                                        </div>
                                     </div>
-                                    <h5 class="service-card-title text-center">Instant Validation</h5>
-                                    <a href="#" class="stretched-link"></a>
                                 </div>
                             </div>
-
-                            <!-- NIN Validation -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
-                                    </div>
-                                    <h5 class="service-card-title text-center">NIN Validation</h5>
-                                    <a href="{{ route('user.nin-validation')}}" class="stretched-link"></a>
-                                </div>
-                            </div>
-                            
-                            <!-- NIN Delinking -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
-                                    </div>
-                                    <h5 class="service-card-title text-center">NIN Delinking</h5>
-                                    <a href="{{ route('user.nin.delink')}}" class="stretched-link"></a>
-                                </div>
-                            </div>
-
-                            <!-- Email Retrieval -->
-                            <div class="col-6 col-sm-4 col-md-3 col-xl-2">
-                                <div class="card service-card position-relative p-4">
-                                    <div class="service-icon-wrapper">
-                                        <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
-                                    </div>
-                                    <h5 class="service-card-title text-center">Email Retrieval</h5>
-                                    <a href="{{ route('user.email.retrive')}}" class="stretched-link"></a>
-                                </div>
-                            </div>
-
                         </div>
+
+                        <!-- BVN Services Section -->
+                        <div class="pb-5">
+                            <div class="section-header mb-4">
+                                <div class="d-flex align-items-center">
+                                    <h4 class="mb-0">BVN Services</h4>
+                                    <div class="flex-grow-1 ms-4 border-bottom opacity-10"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center mb-4">
+                                    <h6 class="text-success fw-bold text-uppercase mb-0" style="font-size: 0.8rem; letter-spacing: 0.1em;">Bank Verification Number</h6>
+                                    <div class="ms-3 flex-grow-1 border-bottom opacity-10"></div>
+                                </div>
+
+                                <div class="row g-3 g-md-4">
+                                    <!-- Verify BVN -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
+                                            </div>
+                                            <h5 class="service-card-title">Verify BVN</h5>
+                                            <p class="text-muted small mb-0">Verify BVN details</p>
+                                            <a href="{{ route('user.verify-bvn') }}" class="stretched-link"></a>
+                                        </div>
+                                    </div>
+
+                                    <!-- BVN RETRIVAL -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
+                                            </div>
+                                            <h5 class="service-card-title">BVN Retrieval</h5>
+                                            <p class="text-muted small mb-0">Find BVN by phone</p>
+                                            <a href="{{ route('user.bvn-phone-search') }}" class="stretched-link"></a>
+                                        </div>
+                                    </div>
+
+                                    <!-- BVN ENROLLMENT -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
+                                            </div>
+                                            <h5 class="service-card-title">Enroll as BVN Agent</h5>
+                                            <p class="text-muted small mb-0">Become a BVN Enrollment Agent</p>
+                                            <a href="{{ route('user.bvn-enrollment') }}" class="stretched-link"></a>
+                                        </div>
+                                    </div>
+
+                                    <!-- BVN MODIFICATION -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card disabled position-relative p-4 text-center">
+                                            <span class="coming-soon-badge">Soon</span>
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/bvn.png') }}" alt="BVN">
+                                            </div>
+                                            <h5 class="service-card-title">BVN Modification</h5>
+                                            <p class="text-muted small mb-0">Modify BVN Details</p>
+                                            <a href="javascript:void(0)" class="stretched-link"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
+            </div>
 
-                <!-- Right side column for transaction table -->
-                <div class="col-lg-12 stretch-card mt-">
+            <!-- Right side column for transaction table -->
+            <div class="col-lg-12 stretch-card mt-2">
                     <div class="container py-3" style="max-width: 100%">
                         <h4 class="fw-light mb-4 text-center">Recent Transactions</h4>
                         <div class="card h-100">
@@ -690,6 +995,34 @@
                     }
                 });
             </script>
+              @if (!empty($popup))
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        let popupDiv = document.createElement('div');
+                        popupDiv.innerHTML = `
+                                <div class="modal fade" id="popupModal" tabindex="-1" aria-labelledby="popupModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                    <div class="modal-header bg-primary text-white">
+                                        <h5 class="modal-title text-white" id="popupModalLabel"> {{ $popup->title ?? 'Notice' }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        {!! nl2br(e(str_replace('{name}', auth()->user()->name, $popup->message))) !!}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            `;
+                        document.body.appendChild(popupDiv);
+                        let modal = new bootstrap.Modal(document.getElementById('popupModal'));
+                        modal.show();
+                    });
+                </script>
+            @endif
             <script>
                 const ctx = document.getElementById('fundingChart').getContext('2d');
 

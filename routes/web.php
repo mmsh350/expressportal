@@ -6,6 +6,7 @@ use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EnrollmentSyncController;
 use App\Http\Controllers\IpeController;
 use App\Http\Controllers\PaymentWebhookController;
+use App\Http\Controllers\PopupController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SiteSettingController;
 use App\Http\Controllers\TransactionController;
@@ -107,6 +108,10 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             Route::post('/ipe-request', [VerificationController::class, 'ipeRequest'])->name('ipe-request');
             Route::get('/ipeStatus/{id}', [VerificationController::class, 'ipeRequestStatus'])->name('ipeStatus');
 
+            Route::get('/modification-ipe', [VerificationController::class, 'showModificationIpe'])->name('modification-ipe');
+            Route::post('/modification-ipe-request', [VerificationController::class, 'modificationIpeRequest'])->name('modification-ipe-request');
+            Route::get('/modificationIpeStatus/{id}', [VerificationController::class, 'modificationIpeRequestStatus'])->name('modificationIpeStatus');
+
             //NIN Validation
             Route::get('/nin-validation', [VerificationController::class, 'showNinValidation'])->name('nin-validation');
             Route::post('nin-validation-request', [VerificationController::class, 'ninValidation'])->name('nin-validation-request');
@@ -182,6 +187,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'u
     Route::get('/view-ipe-request/{id}/edit', [IpeController::class, 'showIpeRequest'])->name('ipe.view-request');
     Route::post('/requests/ipe/{id}/update-status', [IpeController::class, 'updateIpeStatus'])->name('ipe.update-request-status');
 
+    Route::get('/view-modification-ipe-request/{id}/edit', [IpeController::class, 'showModificationIpeRequest'])->name('modification.ipe.view-request');
+    Route::post('/requests/modification-ipe/{id}/update-status', [IpeController::class, 'updateModificationIpeStatus'])->name('modification.ipe.update-request-status');
+
     Route::post('/requests/{id}/{type}/update-status', [ServicesController::class, 'updateRequestStatus'])->name('update-request-status');
     Route::get('/view-request/{id}/{type}/edit', [ServicesController::class, 'showRequests'])->name('view-request');
 
@@ -197,8 +205,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'u
     Route::post('ipe/upload-excel', [IpeController::class, 'uploadExcelIPE'])->name('ipe.upload-excel');
     Route::get('/ipe/refund-failed', [IpeController::class, 'refundFailedTransactions'])->name('ipe.refund');
 
+    Route::get('modification-ipe-index', [IpeController::class, 'modificationIpeIndex'])->name('modification.ipe.index');
+    Route::get('modification-ipe/download-template', [IpeController::class, 'downloadTemplateModificationIPE'])->name('modification.ipe.download-template');
+    Route::post('modification-ipe/upload-excel', [IpeController::class, 'uploadExcelModificationIPE'])->name('modification.ipe.upload-excel');
+    Route::get('/modification-ipe/refund-failed', [IpeController::class, 'refundFailedModificationTransactions'])->name('modification.ipe.refund');
+
      // NIN Services
     Route::get('/delink-services', [ServicesController::class, 'delinkServicesList'])->name('delink.services.list');
     Route::get('/email-retrive-services', [ServicesController::class, 'emailRetriveList'])->name('email.retrive.list');
+
+     Route::get('/popup', [PopupController::class, 'index'])->name('popup.index');
+    Route::post('/save-popup', [PopupController::class, 'store'])->name('popup.store');
+
+     // BVN User Rerquest
+    Route::get('/enrollment-list', [EnrollmentController::class, 'index'])->name('enroll.index');
+    Route::post('/requests/{id}/{type}/update-status2', [EnrollmentController::class, 'updateRequestStatus'])->name('update-request-status2');
+    Route::get('/view-request2/{id}/{type}/edit', [EnrollmentController::class, 'showRequests'])->name('view-request2');
 
 });

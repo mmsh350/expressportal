@@ -146,16 +146,16 @@
         .sidebar-icon-only .sidebar .nav-link i.ms-auto {
             display: none !important;
         }
-        
+
         .sidebar-icon-only .sidebar .nav-item {
             position: relative;
         }
-        
+
         /* Hide submenu by default when collapsed */
         .sidebar-icon-only .sidebar .sub-menu {
             display: none !important;
         }
-        
+
         /* Show submenu as a floating dropdown when clicked while collapsed */
         .sidebar-icon-only .sidebar .sub-menu.show {
             display: block !important;
@@ -169,13 +169,13 @@
             padding: 10px 0;
             z-index: 1050;
         }
-        
+
         .sidebar-icon-only .sidebar .sub-menu.show .nav-link {
             justify-content: flex-start;
             padding: 12px 20px;
             color: rgba(255, 255, 255, 0.9) !important;
         }
-        
+
         .sidebar-icon-only .sidebar .sub-menu.show .nav-link:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
@@ -209,7 +209,7 @@
                 font-size: 14px;
             }
         }
-        
+
         /* Modern UI Overrides */
         body {
             background-color: #f3f4f6 !important;
@@ -223,7 +223,7 @@
             background-color: #f3f4f6 !important;
             padding: 2.5rem 2rem !important;
         }
-        
+
         /* Modern Cards */
         .card {
             border: none !important;
@@ -245,7 +245,7 @@
         .card-body {
             padding: 1.5rem !important;
         }
-        
+
         /* Modern Inputs and Buttons */
         .form-control, .form-select {
             border-radius: 0.5rem !important;
@@ -282,7 +282,7 @@
             background-color: #1e40af !important;
             color: #ffffff !important;
         }
-        
+
         /* Navbar and Sidebar Adjustments */
         .navbar {
             box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
@@ -293,11 +293,11 @@
         .sidebar {
             box-shadow: 4px 0 10px rgba(0, 0, 0, 0.05) !important;
         }
-        
+
         .navbar .nav-profile-name {
             font-weight: 400 !important;
         }
-        
+
         /* Tables */
         .table {
             border-collapse: separate !important;
@@ -319,7 +319,7 @@
             border-bottom: 1px solid #f3f4f6 !important;
             vertical-align: middle !important;
         }
-        
+
         /* Alerts */
         .alert {
             border-radius: 0.75rem !important;
@@ -333,7 +333,7 @@
             background-color: #f0fdf4 !important;
             color: #166534 !important;
         }
-        
+
         /* Typography */
         h1, h2, h3, h4, h5, h6 {
             color: #111827 !important;
@@ -341,6 +341,21 @@
         }
         .text-muted {
             color: #6b7280 !important;
+        }
+
+        /* Sidebar Category Headers */
+        .sidebar .nav-category {
+            padding: 1.5rem 1.5rem 0.5rem 1.5rem;
+            font-size: 11px;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-top: 10px;
+        }
+
+        .sidebar-icon-only .sidebar .nav-category {
+            display: none;
         }
     </style>
 </head>
@@ -385,6 +400,40 @@
             <!-- main-panel ends -->
         </div>
         <!-- page-body-wrapper ends -->
+    </div>
+
+    <!-- NIMC License Modal -->
+    <div class="modal fade" id="nimcLicenseModal" tabindex="-1" aria-labelledby="nimcLicenseModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 1.5rem;">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center px-4 pb-4">
+                    <div class="mb-4">
+                        <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm" style="width: 80px; height: 80px; border: 1px solid #f1f5f9;">
+                            <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC" style="width: 50px;">
+                        </div>
+                    </div>
+                    <h4 class="fw-bold mb-3">NIMC Enrollment License</h4>
+                    <p class="text-muted mb-4 px-2">
+                        Become a certified NIMC Enrollment Agent. This license grants you the official authority to enroll citizens for NIN, providing you with a specialized enrollment machine, software access, and technical support.
+                    </p>
+                    <div class="bg-light rounded-3 p-3 mb-4">
+                        <span class="d-block text-muted small text-uppercase fw-bold mb-1">Registration Fee</span>
+                        <h3 class="fw-bold text-primary mb-0">₦{{ $settings->nimc_license_price ?? '180,000' }}</h3>
+                    </div>
+                    <div class="d-grid gap-2">
+                        <a href="{{ route('user.support') }}" target="_blank" class="btn btn-primary btn-lg rounded-pill fw-bold">
+                            Purchase Now
+                        </a>
+                        <button type="button" class="btn btn-link text-muted text-decoration-none" data-bs-dismiss="modal">
+                            Maybe Later
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- plugins:js -->
