@@ -155,6 +155,9 @@ Route::middleware(['auth', 'user.active'])->group(function () {
             Route::get('/email-retrive', [ServicesController::class, 'emailRetrive'])->name('email.retrive');
             Route::post('/email-retrive/request', [ServicesController::class, 'requestEmailRetrive'])->name('email.retrive.request');
 
+            Route::get('/nin-modifications', [ServicesController::class, 'ninModifications'])->name('nin.modifications');
+            Route::post('/nin-modifications/request', [ServicesController::class, 'requestNinModification'])->name('nin.modifications.request');
+
 
             //Whatsapp API Support--------------------------------------------------------------------------
             Route::get('/support', function () {
@@ -213,6 +216,9 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'u
      // NIN Services
     Route::get('/delink-services', [ServicesController::class, 'delinkServicesList'])->name('delink.services.list');
     Route::get('/email-retrive-services', [ServicesController::class, 'emailRetriveList'])->name('email.retrive.list');
+    Route::get('/nin-modifications-list', [ServicesController::class, 'adminNinModificationsList'])->name('nin.modifications.list');
+    Route::get('/view-nin-modification/{id}/edit', [ServicesController::class, 'adminShowModification'])->name('nin.modification.view');
+    Route::post('/nin-modification/{id}/update-status', [ServicesController::class, 'adminUpdateModificationStatus'])->name('nin.modification.update-status');
 
      Route::get('/popup', [PopupController::class, 'index'])->name('popup.index');
     Route::post('/save-popup', [PopupController::class, 'store'])->name('popup.store');

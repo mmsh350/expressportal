@@ -9,6 +9,7 @@ use App\Models\Wallet;
 use App\Services\TransactionService;
 use Carbon\Carbon;
 use App\Models\SiteSetting;
+use App\Models\NinModification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -726,5 +727,201 @@ class ServicesController extends Controller
         return view('admin.email-retrive-list', compact(
             'pending', 'resolved', 'rejected', 'total_request', 'nin_services', 'request_type'
         ));
+    }
+
+    public function ninModifications(Request $request)
+    {
+        $services = Service::where('type', 'nin_modification')
+            ->where('status', 'enabled')->get();
+
+        $query = NinModification::where('user_id', auth()->id());
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('nin', 'like', "%{$search}%")
+                    ->orWhere('type', 'like', "%{$search}%")
+                    ->orWhere('status', 'like', "%{$search}%")
+                    ->orWhere('refno', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('date_from')) {
+            $query->whereDate('created_at', '>=', $request->input('date_from'));
+        }
+
+        if ($request->filled('date_to')) {
+            $query->whereDate('created_at', '<=', $request->input('date_to'));
+        }
+        $ninServices = $query->orderBy('id', 'desc')->paginate(10);
+
+        $statusCounts = NinModification::selectRaw('status, COUNT(*) as count')
+            ->where('user_id', auth()->id())
+            ->groupBy('status')
+            ->pluck('count', 'status');
+
+        $totalAll = NinModification::where('user_id', auth()->id())->count();
+        $totalPending = $statusCounts['Pending'] ?? 0;
+        $totalFailed = $statusCounts['Failed'] ?? 0;
+        $totalInProgress = $statusCounts['In-Progress'] ?? 0;
+        $totalSuccessful = $statusCounts['Successful'] ?? 0;
+
+        $settings = SiteSetting::first();
+
+        return view('nin-modifications', compact(
+            'services',
+            'ninServices',
+            'totalAll',
+            'totalPending',
+            'totalFailed',
+            'totalInProgress',
+            'totalSuccessful',
+            'settings'
+        ));
+    }
+
+    public function requestNinModification(Request $request)
+    {
+        $request->validate([
+            'service_code' => ['required', 'exists:services,service_code'],
+            'nin' => ['required', 'digits:11'],
+            'clear_picture' => ['nullable', 'image', 'max:2048'],
+            'email' => ['nullable', 'email'],
+            'password' => ['nullable', 'string'],
+        ]);
+
+        $service = Service::where('service_code', $request->service_code)
+            ->where('status', 'enabled')
+            ->first();
+
+        if (!$service) {
+            return redirect()->back()->with('error', 'Sorry Action not Allowed !');
+        }
+
+        $typeName = $service->name; // e.g. "DOB MOD"
+
+        $wallet = Wallet::where('user_id', auth()->id())->first();
+        if ($wallet->balance < $service->amount) {
+            return redirect()->back()->with('error', 'Sorry Wallet Not Sufficient for Transaction !');
+        }
+
+        try {
+            DB::transaction(function () use ($wallet, $service, $request, $typeName) {
+                $balance = $wallet->balance - $service->amount;
+                Wallet::where('user_id', auth()->id())->update(['balance' => $balance]);
+
+                $serviceDesc = 'Wallet debitted with a service fee of ₦' . number_format($service->amount, 2);
+                $transaction = $this->transactionService->createTransaction(auth()->id(), $service->amount, 'NIN Modification: ' . $typeName, $serviceDesc, 'Wallet', 'Approved');
+
+                $picturePath = null;
+                if ($request->hasFile('clear_picture')) {
+                    $picturePath = $request->file('clear_picture')->store('nin_modifications', 'public');
+                }
+
+                NinModification::create([
+                    'user_id' => auth()->id(),
+                    'tnx_id' => $transaction->id,
+                    'refno' => $transaction->referenceId,
+                    'type' => $typeName,
+                    'nin' => $request->nin,
+                    'phone_number' => $request->phone_number,
+                    'surname' => $request->surname,
+                    'first_name' => $request->first_name,
+                    'middle_name' => $request->middle_name,
+                    'dob' => $request->dob,
+                    'address' => $request->address,
+                    'town' => $request->town,
+                    'lga_origin' => $request->lga_origin,
+                    'state_origin' => $request->state_origin,
+                    'lga_residence' => $request->lga_residence,
+                    'state_residence' => $request->state_residence,
+                    'gender' => $request->gender,
+                    'modification_type_detail' => $request->modification_type_detail,
+                    'clear_picture' => $picturePath,
+                    'email' => $request->email,
+                    'password' => $request->password,
+                ]);
+            });
+
+            return redirect()->back()->with('success', 'NIN Modification request has been submitted successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'An error occurred while processing your request: ' . $e->getMessage());
+        }
+    }
+
+    public function adminNinModificationsList(Request $request)
+    {
+        $pending = NinModification::whereIn('status', ['Pending', 'In-Progress'])->count();
+        $resolved = NinModification::where('status', 'Successful')->count();
+        $rejected = NinModification::where('status', 'Failed')->count();
+        $total_request = NinModification::count();
+
+        $query = NinModification::with(['user', 'transactions']);
+
+        if ($request->filled('search')) {
+            $searchTerm = $request->search;
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('refno', 'like', "%{$searchTerm}%")
+                    ->orWhere('nin', 'like', "%{$searchTerm}%")
+                    ->orWhere('type', 'like', "%{$searchTerm}%")
+                    ->orWhere('status', 'like', "%{$searchTerm}%")
+                    ->orWhereHas('user', function ($subQuery) use ($searchTerm) {
+                        $subQuery->where('name', 'like', "%{$searchTerm}%");
+                    });
+            });
+        }
+
+        if ($dateFrom = request('date_from')) {
+            $query->whereDate('created_at', '>=', $dateFrom);
+        }
+
+        if ($dateTo = request('date_to')) {
+            $query->whereDate('created_at', '<=', $dateTo);
+        }
+
+        $modifications = $query
+            ->orderByRaw("CASE WHEN status = 'Pending' THEN 1 WHEN status = 'In-Progress' THEN 2 ELSE 3 END")
+            ->orderByDesc('id')
+            ->paginate(10);
+
+        return view('admin.nin-modifications-list', compact(
+            'pending', 'resolved', 'rejected', 'total_request', 'modifications'
+        ));
+    }
+
+    public function adminShowModification($id)
+    {
+        $modification = NinModification::with(['user', 'transactions'])->findOrFail($id);
+        return view('admin.view-modification', compact('modification'));
+    }
+
+    public function adminUpdateModificationStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Pending,In-Progress,Successful,Failed',
+            'comment' => 'required|string',
+        ]);
+
+        $modification = NinModification::findOrFail($id);
+        $modification->status = $request->status;
+        $modification->reason = $request->comment;
+
+        if ($request->status === 'Failed') {
+            $modification->refunded_at = Carbon::now();
+            $refundAmount = $request->refundAmount ?? 0;
+
+            if ($refundAmount > 0) {
+                $wallet = Wallet::where('user_id', $modification->user_id)->first();
+                $wallet->balance += $refundAmount;
+                $wallet->save();
+
+                $serviceDesc = 'Wallet credited with a Request fee refund of ₦' . number_format($refundAmount, 2);
+                $this->transactionService->createTransaction($modification->user_id, $refundAmount, 'NIN Modification Refund', $serviceDesc, 'Wallet', 'Approved');
+            }
+        }
+
+        $modification->save();
+
+        return redirect()->route('admin.nin.modifications.list')->with('success', 'Modification status updated successfully.');
     }
 }

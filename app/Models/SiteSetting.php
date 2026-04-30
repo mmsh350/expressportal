@@ -27,5 +27,7 @@ class SiteSetting extends Model
         'bvn_enrollment_notice',
         'email_retrieval_notice',
         'nimc_license_price',
+        'nin_modification_notice',
+        'nin_modification_popup',
     ];
 }

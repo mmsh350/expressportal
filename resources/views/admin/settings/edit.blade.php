@@ -119,6 +119,18 @@
                         <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed at the top of the Email Retrieval request form for users.</small>
                     </div>
 
+                    <div class="mb-4">
+                        <label for="nin_modification_notice" class="form-label fw-semibold">NIN Modification Service Notice</label>
+                        <textarea name="nin_modification_notice" id="nin_modification_notice" class="form-control bg-light border-0 px-3 py-2" rows="4" placeholder="Enter the notice message to display on the NIN Modification page...">{{ old('nin_modification_notice', $settings->nin_modification_notice ?? 'YOU CAN VERIFY THE NIN AND USE THE IMAGE IF IT IS CLEAR OTHERWISE SNAP THE CUSTOMER CLEAR IMAGE SHOWING SHOULDERS, ALL MODIFICATIONS THAT ARE SUBMITTED SHOULD BE FRESH AND NOT DONE BEFORE ON SELF-SERVICE. IF APPLICANT HAS CREATED AN ACCOUNT ON SELF-SERVICE, HE SHOULD SEND THE EMAIL AND PASSWORD, IF HE FORGETS THE EMAIL HE SHOULD DO SELF SERVICE EMAIL RETRIVE AND GET THE CORRECT EMAIL AS DOUBLE ACCOUNTS CANNOT BE CREATED ON SELF-SERVICE, MODIFICATION THAT REQUIRES DELINKING SHOULD NOT BE SUBMITTED, IF AN ACCOUNT HAS ALREADY BEING CREATED ON ANOTHER DEVICE, SELF-SERVICE DELINKING MUST BE DONE WHICH TAKES 7-10DAYS (COST EXTRA 2K) AND CORRECT EMAIL AND PASSWORD SHOULD BE SUBMITTED, FAILED MODIFICATIONS ARE ALWAYS REFUNDED BUT #500 WILL BE DEDUCTED WHILE DOB #1000 WILL BE DEDUCTED FOR TRIALFEES, VERIFICATION, EMAIL CREATION AND OTHERS.') }}</textarea>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>This message will be displayed on the NIN Modification form for users.</small>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="nin_modification_popup" class="form-label fw-semibold">NIN Modification Popup Message</label>
+                        <textarea name="nin_modification_popup" id="nin_modification_popup" class="form-control bg-light border-0 px-3 py-2" rows="3" placeholder="Enter the popup message to display when users visit the NIN Modification page...">{{ old('nin_modification_popup', $settings->nin_modification_popup ?? 'Please read the modification requirements carefully before proceeding. Failed requests incur trial fees.') }}</textarea>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>If provided, this message will be shown as a popup modal when the modification page is opened.</small>
+                    </div>
+
                     <div>
                         <label for="nimc_license_price" class="form-label fw-semibold">NIMC License Price</label>
                         <input type="text" name="nimc_license_price" id="nimc_license_price" class="form-control bg-light border-0 px-3 py-2" placeholder="e.g. 180,000" value="{{ old('nimc_license_price', $settings->nimc_license_price ?? '180,000') }}">

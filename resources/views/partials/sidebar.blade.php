@@ -118,6 +118,14 @@
         </li>
 
         <li class="nav-item">
+            <a class="nav-link {{ Route::is('user.nin.modifications') ? 'active' : '' }}"
+                href="{{ route('user.nin.modifications') }}">
+                <i class="mdi mdi-account-edit menu-icon"></i>
+                <span class="menu-title">NIN Modifications</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
             <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#nimcLicenseModal">
                 <i class="mdi mdi-card-account-details menu-icon"></i>
                 <span class="menu-title">NIMC License</span>
@@ -236,6 +244,12 @@
                         <a class="nav-link {{ Route::is('admin.email.retrive.list') ? 'active' : '' }}"
                             href="{{ route('admin.email.retrive.list') }}">
                             <i class="mdi mdi-email-search menu-icon"></i> Email Retrive
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('admin.nin.modifications.list') ? 'active' : '' }}"
+                            href="{{ route('admin.nin.modifications.list') }}">
+                            <i class="mdi mdi-account-edit menu-icon"></i> NIN Modifications
                         </a>
                     </li>
                     <li class="nav-item">

@@ -644,6 +644,19 @@
                                             <a href="#" data-bs-toggle="modal" data-bs-target="#nimcLicenseModal" class="stretched-link"></a>
                                         </div>
                                     </div>
+
+                                    <!-- NIN Modifications -->
+                                    <div class="col-6 col-sm-4 col-md-3 col-xl-2">
+                                        <div class="card service-card position-relative p-4 text-center">
+                                            <span class="card-new-badge">Mod</span>
+                                            <div class="service-icon-wrapper">
+                                                <img src="{{ asset('assets/images/nimc.png') }}" alt="NIMC">
+                                            </div>
+                                            <h5 class="service-card-title">NIN Modifications</h5>
+                                            <p class="text-muted small mb-0">Update NIN details</p>
+                                            <a href="{{ route('user.nin.modifications')}}" class="stretched-link"></a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

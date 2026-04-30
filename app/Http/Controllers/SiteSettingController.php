@@ -52,6 +52,8 @@ class SiteSettingController extends Controller
             'bvn_enrollment_notice' => 'nullable|string',
             'email_retrieval_notice' => 'nullable|string',
             'nimc_license_price' => 'nullable|string',
+            'nin_modification_notice' => 'nullable|string',
+            'nin_modification_popup' => 'nullable|string',
         ]);
 
         // For each checkbox, set 1 if present, 0 if missing
