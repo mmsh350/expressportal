@@ -134,7 +134,11 @@ class VerificationController extends Controller
 
         $user = auth()->user();
 
-        $latestVerifications = $user->verifications()->latest()->paginate(5);
+        $latestVerifications = $user->verifications()
+    ->where('type', 'NIN')
+    ->latest()
+    ->limit(5)
+    ->get();
 
         return view('verification.nin-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee','latestVerifications'));
     }
@@ -155,7 +159,7 @@ class VerificationController extends Controller
 
         $user = auth()->user();
 
-        $latestVerifications = $user->verifications()->latest()->paginate(5);
+        $latestVerifications = $user->verifications()->where('type', 'NIN')->latest()->limit(5)->get();
 
         return view('verification.demo-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee','latestVerifications'));
     }
@@ -189,7 +193,7 @@ class VerificationController extends Controller
 
         $user = auth()->user();
 
-        $latestVerifications = $user->verifications()->latest()->paginate(5);
+        $latestVerifications = $user->verifications()->where('type', 'NIN')->latest()->limit(5)->get();
 
 
         return view('verification.nin-phone-verify', compact('ServiceFee', 'standard_nin_fee', 'premium_nin_fee', 'regular_nin_fee','basic_nin_fee','latestVerifications'));

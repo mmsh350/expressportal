@@ -77,6 +77,32 @@
                 </div>
             </div>
 
+            <!-- General Settings Card -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-header bg-transparent border-bottom px-4 py-3">
+                    <h5 class="mb-0 fw-bold"><i class="mdi mdi-cog-outline text-success me-2 fs-4 align-middle"></i>General Settings</h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <label for="whatsapp_url" class="form-label fw-semibold">WhatsApp Support URL (Groups/Support Link)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="mdi mdi-link-variant text-primary fs-5"></i></span>
+                            <input type="url" name="whatsapp_url" id="whatsapp_url" class="form-control bg-light border-0 px-3 py-2" placeholder="https://chat.whatsapp.com/..." value="{{ old('whatsapp_url', $settings->whatsapp_url ?? '') }}">
+                        </div>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>Enter the full URL for your WhatsApp group or primary support link.</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="whatsapp_number" class="form-label fw-semibold">WhatsApp Contact Number (For Direct Chat)</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light border-0"><i class="mdi mdi-whatsapp text-success fs-5"></i></span>
+                            <input type="text" name="whatsapp_number" id="whatsapp_number" class="form-control bg-light border-0 px-3 py-2" placeholder="2348012345678" value="{{ old('whatsapp_number', $settings->whatsapp_number ?? '') }}">
+                        </div>
+                        <small class="text-muted mt-2 d-block"><i class="mdi mdi-information-outline me-1 text-primary"></i>Enter the phone number in international format (e.g., 2348012345678) for direct 'wa.me' chat links.</small>
+                    </div>
+                </div>
+            </div>
+
             <!-- Service Notices Card -->
             <div class="card shadow-sm border-0 mb-4">
                 <div class="card-header bg-transparent border-bottom px-4 py-3">

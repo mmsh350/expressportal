@@ -188,9 +188,7 @@
                             <div class="col-md-12">
                                 @if (!$latestVerifications->isEmpty())
                                     @php
-                                        $currentPage = $latestVerifications->currentPage();
-                                        $perPage = $latestVerifications->perPage();
-                                        $serialNumber = ($currentPage - 1) * $perPage + 1;
+                                        $serialNumber = 1;
                                     @endphp
 
 
@@ -278,11 +276,6 @@
                                     @endforeach
                                 </div>
 
-
-                                    <!-- Pagination Links -->
-                                    <div class="d-flex justify-content-center">
-                                        {{ $latestVerifications->links('vendor.pagination.bootstrap-4') }}
-                                    </div>
                                 @else
                                     <div class="text-center">
 

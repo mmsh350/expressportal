@@ -321,9 +321,6 @@
                     </div>
                 </div>
 
-            </div>
-        </div>
-    </div>
 @endsection
 @push('scripts')
     <script>
@@ -331,7 +328,7 @@
             var requestId; // This will store the ID for later use
             var trxAmount;
 
-            $('#reply').on('shown.bs.modal', function(event) {
+            $('#reply').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 requestId = button.data('id');
                 trxAmount = button.data('trxamount');

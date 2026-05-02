@@ -22,6 +22,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/themify-icons.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     @stack('styles')
     <style>
@@ -363,20 +364,11 @@
 <body>
     <div class="page-loading" id="loader">
         <div class="page-loading-inner">
-
-
-
-            <div class="loader-demo-box mb-5" style="height:0px; border:0px !important;">
-                <div class="circle-loader"></div>
-            </div>
-
-
+            <div class="modern-spinner"></div>
             <h6 class="loader-text">
                 {{ $settings->short_name ?? config('app.name') }}
             </h6>
-
         </div>
-
     </div>
     <div class="container-scroller">
         @include('partials.navbar')
@@ -424,7 +416,17 @@
                         <h3 class="fw-bold text-primary mb-0">₦{{ $settings->nimc_license_price ?? '180,000' }}</h3>
                     </div>
                     <div class="d-grid gap-2">
-                        <a href="{{ route('user.support') }}" target="_blank" class="btn btn-primary btn-lg rounded-pill fw-bold">
+                        @php
+                            $waNumber = $settings->whatsapp_number ?? '';
+                            $waMessage = "Hello, I am interested in purchasing the NIMC Enrollment License (₦" . ($settings->nimc_license_price ?? '180,000') . ").";
+                            if ($waNumber) {
+                                $nimcWaUrl = "https://wa.me/" . preg_replace('/[^0-9]/', '', $waNumber) . "?text=" . urlencode($waMessage);
+                            } else {
+                                $waUrl = $settings->whatsapp_url ?? '#';
+                                $nimcWaUrl = $waUrl . (str_contains($waUrl, '?') ? '&' : '?') . "text=" . urlencode($waMessage);
+                            }
+                        @endphp
+                        <a href="{{ $nimcWaUrl }}" target="_blank" class="btn btn-primary btn-lg rounded-pill fw-bold">
                             Purchase Now
                         </a>
                         <button type="button" class="btn btn-link text-muted text-decoration-none" data-bs-dismiss="modal">

@@ -29,5 +29,7 @@ class SiteSetting extends Model
         'nimc_license_price',
         'nin_modification_notice',
         'nin_modification_popup',
+        'whatsapp_url',
+        'whatsapp_number',
     ];
 }

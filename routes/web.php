@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComboDeviceController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EnrollmentController;
 use App\Http\Controllers\EnrollmentSyncController;
@@ -227,5 +228,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => ['auth', 'u
     Route::get('/enrollment-list', [EnrollmentController::class, 'index'])->name('enroll.index');
     Route::post('/requests/{id}/{type}/update-status2', [EnrollmentController::class, 'updateRequestStatus'])->name('update-request-status2');
     Route::get('/view-request2/{id}/{type}/edit', [EnrollmentController::class, 'showRequests'])->name('view-request2');
+
+    // Combo Devices
+    Route::get('/combo-devices', [ComboDeviceController::class, 'index'])->name('combo-devices.index');
+    Route::post('/combo-devices', [ComboDeviceController::class, 'store'])->name('combo-devices.store');
+    Route::get('/combo-devices/{id}/edit', [ComboDeviceController::class, 'edit'])->name('combo-devices.edit');
+    Route::put('/combo-devices/{id}', [ComboDeviceController::class, 'update'])->name('combo-devices.update');
+    Route::delete('/combo-devices/{id}', [ComboDeviceController::class, 'destroy'])->name('combo-devices.destroy');
+    Route::post('/combo-devices/{id}/delete-image', [ComboDeviceController::class, 'deleteImage'])->name('combo-devices.delete-image');
 
 });

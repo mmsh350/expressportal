@@ -3,7 +3,7 @@
     var preloader = document.querySelector('.page-loading');
 
     preloader.classList.add('active');
-    preloader.style.display = 'block';
+    preloader.style.display = 'flex';
 
     function hideLoader() {
         preloader.classList.remove('active');

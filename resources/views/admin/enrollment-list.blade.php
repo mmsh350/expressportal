@@ -177,7 +177,6 @@
                                             <th>Reference Number</th>
                                             <th>BVN No.</th>
                                             <th>Service Type</th>
-                                            <th>Bank</th>
                                             <th>Amount</th>
                                             <th>Status</th>
                                             <th>Actions</th>
@@ -190,7 +189,6 @@
                                                 <td>{{ $service->refno }}</td>
                                                 <td>{{ $service->bvn }}</td>
                                                 <td>BVN User</td>
-                                                <td>{{ $service->bank_name }}</td>
                                                <td>₦ {{ optional($service->transactions)->amount ?? '0' }}</td>
                                                 <td>
 

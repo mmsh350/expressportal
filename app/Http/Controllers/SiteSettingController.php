@@ -54,6 +54,8 @@ class SiteSettingController extends Controller
             'nimc_license_price' => 'nullable|string',
             'nin_modification_notice' => 'nullable|string',
             'nin_modification_popup' => 'nullable|string',
+            'whatsapp_url' => 'nullable|url',
+            'whatsapp_number' => 'nullable|string|max:20',
         ]);
 
         // For each checkbox, set 1 if present, 0 if missing

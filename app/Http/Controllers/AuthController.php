@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Repositories\WalletRepository;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\PasswordResetMail;
@@ -85,6 +86,9 @@ class AuthController extends Controller
             if ($referralDetails['referral_id']) {
                 $this->addBonus($referralDetails['referral_id'], $referralDetails['referral_bonus'], $user->id);
             }
+
+            $repObj = new WalletRepository;
+            $repObj->createWalletAccount($user->id);
 
             return redirect()->route('auth.login')
                 ->with('success', 'Your account was created successfully. Login to proceed');

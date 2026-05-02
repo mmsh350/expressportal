@@ -43,117 +43,70 @@ $("#verifyNIN").on("click", function (event) {
             $("#download").addClass("d-none");
         },
         success: function (result) {
-            $("#loader").hide();
+            hideLoader();
 
             if (result && result.data) {
-//                 validationInfo.innerHTML = `
-//             <div class="border border-light">
-//    <div class="table-responsive">
-//    <center><span class="text-danger mt-4" style="margin-top:5px; padding-top:3px;">${result.data.message}</span></center>
-//       <table class="table">
-//          <thead >
-//             <tr>
-//                <th style="border: none ! important;" width="20%"></th>
-//                <th style="border: none ! important;"></th>
-//                <th style="border: none ! important;"></th>
-//                <th style="border: none ! important;"></th>
-//             </tr>
-//          </thead>
-//          <tbody>
-//             <tr>
-//                <th scope="row" rowspan="9">
-//                   <img class="rounded" src="data:image/;base64, ${result.data.face}" alt="User Image" style="width: 250px; height: 250px;">
-//                </th>
-//             </tr>
-//               <tr>
-//                <th scope="row" style="text-align:right; border: none ! important;">Tracking Number</th>
-//                <td  style="text-align:left">${result.data.trackingid}
-//                </td>
-//             </tr>
-//             <tr>
-//                <th scope="row" style="text-align:right; border: none ! important;">NIN</th>
-//                <td style="text-align:left" ><span id="nin_no" >${result.data.nin}</span>
-//                </td>
-//             </tr>
-//             <tr>
-//                <th scope="row" style="text-align:right; border: none ! important;">FirstName</th>
-//                <td  style="text-align:left">${result.data.firstname}
-//                </td>
-//             </tr>
-//             <tr>
-//                <th scope="row" style="text-align:right; border: none ! important;">Surname</th>
-//                <td  style="text-align:left">${result.data.lastname}
-//                </td>
-//             </tr>
-//             <tr>
-//                <th scope="row" style="text-align:right; border: none ! important;">Middle Name</th>
-//                <td  style="text-align:left">${result.data.middlename}
-//                </td>
-//             </tr>
-//             <tr>
-//                 <th scope="row" style="text-align:right; border: none !important;">Gender</th>
-//                 <td style="text-align:left">
-//                     ${result.data.gender === 'm' ? 'Male' : result.data.gender === 'f' ? 'Female' : 'Not Specified'}
-//                 </td>
-//             </tr>
                 const mime = getMimeType(result.data.face);
                 const ext = mime.split('/')[1];
 
-validationInfo.innerHTML = `
-<div class="border border-light p-3">
-  <div class="row">
-    <div class="col-md-4 text-center mb-3">
-      <div class="position-relative d-inline-block">
-        <img class="rounded img-fluid shadow-sm border" src="data:${mime};base64, ${result.data.face}" alt="User Image" style="max-width: 200px; height: auto;">
-        <div class="mt-2">
-           <a href="data:${mime};base64, ${result.data.face}" download="Tracking_Image_${result.data.nin}.${ext}" class="btn btn-sm btn-outline-primary w-100">
+                // Unhide the container and clear hidden class
+                validationInfo.classList.remove("hidden");
+                $(validationInfo).show();
+
+                validationInfo.innerHTML = `
+<div class="border border-light p-4 rounded bg-white shadow-sm">
+  <div class="row align-items-start">
+    <!-- Image Section -->
+    <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+      <div class="position-relative d-inline-block p-2 border rounded-3 bg-light">
+        <img class="img-fluid rounded shadow-sm" src="data:${mime};base64, ${result.data.face}" alt="User Image" style="max-width: 180px; height: auto;">
+        <div class="mt-3">
+           <a href="data:${mime};base64, ${result.data.face}" download="Tracking_Image_${result.data.nin}.${ext}" class="btn btn-sm btn-primary w-100">
               <i class="bi bi-download"></i> Download Photo
            </a>
         </div>
       </div>
     </div>
-    <div class="col-md-8">
-      <div class="table-responsive">
-        <table class="table table-sm">
-          <tbody>
-            <tr>
-              <th style="width: 40%;">Tracking Number</th>
-              <td>${result.data.trackingid}</td>
-            </tr>
-            <tr>
-              <th>NIN</th>
-              <td><span id="nin_no">${result.data.nin}</span></td>
-            </tr>
-            <tr>
-              <th>First Name</th>
-              <td>${result.data.firstname}</td>
-            </tr>
-            <tr>
-              <th>Surname</th>
-              <td>${result.data.lastname}</td>
-            </tr>
-            <tr>
-              <th>Middle Name</th>
-              <td>${result.data.middlename}</td>
-            </tr>
-            <tr>
-              <th>Gender</th>
-              <td>${result.data.gender === 'm' ? 'Male' : result.data.gender === 'f' ? 'Female' : 'Not Specified'}</td>
-            </tr>
-             <tr>
-              <th>ZONE</th>
-              <td>${result.data.state}</td>
-            </tr>
-            <tr>
-              <th>Town</th>
-              <td>${result.data.town ?? ''}</td>
-            </tr>
-            <tr>
-              <th>Address</th>
-              <td>${result.data.address}</td>
-            </tr>
-          </tbody>
-        </table>
+
+    <!-- Data Section -->
+    <div class="col-12 col-md-8">
+      <div class="ps-md-4">
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Tracking Number</div>
+          <div class="col-12 col-sm-7 fw-bold text-primary text-sm-end">${result.data.trackingid}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">NIN</div>
+          <div class="col-12 col-sm-7 fw-semibold text-sm-end" id="nin_no">${result.data.nin}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">First Name</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.firstname}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Surname</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.lastname}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Middle Name</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.middlename ?? '—'}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Gender</div>
+          <div class="col-12 col-sm-7 text-sm-end"><span class="badge bg-light text-dark border">${result.data.gender === 'm' ? 'Male' : result.data.gender === 'f' ? 'Female' : 'Not Specified'}</span></div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Zone/State</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.state}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Town</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.town ?? ''}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Address</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.address}</div>
+        </div>
       </div>
     </div>
   </div>

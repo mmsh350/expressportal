@@ -44,99 +44,102 @@ $("#verifyNIN").on("click", function (event) {
 
         },
         success: function (result) {
-            $("#loader").hide();
- 
+            hideLoader();
+
             if (result && result.data) {
                 const mime = getMimeType(result.data.photo);
                 const ext = mime.split('/')[1];
 
-validationInfo.innerHTML = `
-<div class="border border-light p-3">
-   <div class="row">
-      <div class="col-md-4 text-center mb-3">
-         <div class="position-relative d-inline-block">
-            <img class="rounded img-fluid shadow-sm border" src="data:${mime};base64, ${result.data.photo}" alt="User Image" style="max-width: 200px; height: auto;">
-            <div class="mt-2 text-center">
-                <a href="data:${mime};base64, ${result.data.photo}" download="NIN_Demo_Image_${result.data.idNumber}.${ext}" class="btn btn-sm btn-outline-primary w-100">
-                    <i class="bi bi-download"></i> Download Photo
-                </a>
-            </div>
-         </div>
+                // Unhide the container and clear hidden class
+                validationInfo.classList.remove("hidden");
+                $(validationInfo).show();
+
+                validationInfo.innerHTML = `
+<div class="border border-light p-4 rounded bg-white shadow-sm">
+  <div class="row align-items-start">
+    <!-- Image Section -->
+    <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+      <div class="position-relative d-inline-block p-2 border rounded-3 bg-light">
+        <img class="img-fluid rounded shadow-sm" src="data:${mime};base64, ${result.data.photo}" alt="User Image" style="max-width: 180px; height: auto;">
+        <div class="mt-3">
+           <a href="data:${mime};base64, ${result.data.photo}" download="NIN_Demo_Image_${result.data.idNumber}.${ext}" class="btn btn-sm btn-primary w-100">
+              <i class="bi bi-download"></i> Download Photo
+           </a>
+        </div>
       </div>
-      <div class="col-md-8">
-         <div class="table-responsive">
-            <table class="table table-sm">
-               <tbody>
-                  <tr>
-                     <th style="width: 40%;">NIN</th>
-                     <td><span id="nin_no">${result.data.idNumber}</span></td>
-                  </tr>
-                    <tr>
-                        <th>Tracking ID</th>
-                        <td>${result.data.trackingId}</td>
-                    </tr>
-                  <tr>
-                     <th>First Name</th>
-                     <td>${result.data.firstName}</td>
-                  </tr>
-                  <tr>
-                     <th>Surname</th>
-                     <td>${result.data.lastName}</td>
-                  </tr>
-                  <tr>
-                     <th>Middle Name</th>
-                     <td>${result.data.middleName}</td>
-                  </tr>
-                  <tr>
-                     <th>Date of Birth</th>
-                     <td>${result.data.dateOfBirth}</td>
-                  </tr>
-                  <tr>
-                     <th>Phone No</th>
-                     <td>${result.data.mobile}</td>
-                  </tr>
-                  <tr>
-                     <th>Gender</th>
-                     <td>${result.data.gender}</td>
-                  </tr>
-                 <tr>
-              <th>Residence State</th>
-              <td>${result.data.residence_state ?? ''}</td>
-            </tr>
-            <tr>
-              <th>Residence LGA / town </th>
-              <td>${result.data.residence_lga ?? ''} / ${result.data.residence_town ?? ''}</td>
-            </tr>
-            <tr>
-              <th>Birth State</th>
-              <td>${result.data.self_origin_state ?? ''}</td>
-            </tr>
-            <tr>
-              <th>Birth LGA / town </th>
-              <td>${result.data.self_origin_lga ?? ''} / ${result.data.self_origin_place ?? ''}</td>
-            </tr>
-                  <tr>
-                     <th>Address</th>
-                     <td>${result.data.addressLine}</td>
-                  </tr>
-               </tbody>
-            </table>
-         </div>
+    </div>
+
+    <!-- Data Section -->
+    <div class="col-12 col-md-8">
+      <div class="ps-md-4">
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">NIN Number</div>
+          <div class="col-12 col-sm-7 fw-bold text-primary text-sm-end" id="nin_no">${result.data.idNumber}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Tracking ID</div>
+          <div class="col-12 col-sm-7 fw-semibold text-sm-end">${result.data.trackingId}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">First Name</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.firstName}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Surname</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.lastName}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Middle Name</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.middleName ?? '—'}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Date of Birth</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.dateOfBirth}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Gender</div>
+          <div class="col-12 col-sm-7 text-sm-end"><span class="badge bg-light text-dark border">${result.data.gender}</span></div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Phone Number</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.mobile}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Residence State</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.residence_state ?? ''}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Residence LGA / Town</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.residence_lga ?? ''} / ${result.data.residence_town ?? ''}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">State of Origin</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.self_origin_state ?? ''}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">LGA of Origin</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.self_origin_lga ?? ''} / ${result.data.self_origin_place ?? ''}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Address</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.addressLine ?? ''}</div>
+        </div>
       </div>
-   </div>
+    </div>
+  </div>
 </div>
 `;
 
-$("#download").removeClass("d-none"); // show
+                $("#download").removeClass("d-none"); // show
             } else {
                 hideLoader();
 
                 $("#errorMsg").show();
-                $("#message").html("Invalid Response");
+                $("#message").html("Invalid Response from Server");
 
                 setTimeout(function () {
                     $("#errorMsg").fadeOut();
-                }, 30000);
+                }, 10000);
             }
         },
         error: function (data) {

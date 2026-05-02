@@ -7,6 +7,8 @@ use App\Models\Enrollment;
 use App\Models\IpeRequest;
 use App\Models\NinValidation;
 use App\Models\Popup;
+use App\Models\ComboDevice;
+use App\Models\NinModification;
 use App\Models\Transaction;
 use App\Models\User;
 use App\Services\TransactionService;
@@ -85,6 +87,7 @@ class DashboardController extends Controller
                 ->where('tag', 'MODIFICATION')->count();
 
             $bvnEnrollmentCount = Enrollment::whereIn('status', ['submitted', 'processing'])->count();
+            $ninModificationCount = NinModification::whereIn('status', ['Pending', 'In-Progress'])->count();
 
             $metrics = [
                 [
@@ -173,6 +176,13 @@ class DashboardController extends Controller
                     'bg' => 'success',
                     'href' => 'admin.enroll.index',
                 ],
+                [
+                    'title' => 'NIN Modification',
+                    'value' => number_format($ninModificationCount),
+                    'icon' => 'bi-pencil-square',
+                    'bg' => 'warning',
+                    'href' => 'admin.nin.modifications.list',
+                ],
             ];
 
             $depositChartData = [
@@ -214,14 +224,17 @@ class DashboardController extends Controller
                 ->get();
 
         }
-$popup = Popup::where('is_active', true)->first();
+        $comboDevices = ComboDevice::where('is_active', true)->latest()->get();
+
+        $popup = Popup::where('is_active', true)->first();
         return view('user.dashboard', [
             'kycPending' => $kycPending,
             'status' =>   $status,
             'metrics' => $metrics ?? null,
             'depositChartData' => $depositChartData ?? null,
             'topFunders' => $topFunders ?? collect(),
-             'popup' => $popup,
+            'popup' => $popup,
+            'comboDevices' => $comboDevices,
         ]);
     }
 }

@@ -43,64 +43,90 @@ $("#verifyBVN").on("click", function (event) {
 
         },
         success: function (result) {
-            $("#loader").hide();
             hideLoader();
 
-            const mime = getMimeType(result.data.image);
-            const ext = mime.split('/')[1];
+            if (result && result.data) {
+                const mime = getMimeType(result.data.image);
+                const ext = mime.split('/')[1];
 
-validationInfo.innerHTML = `
-<div class="border border-light p-3">
-    <div class="row align-items-start">
-        <div class="col-12 col-md-4 text-center mb-3 mb-md-0">
-            <div class="position-relative d-inline-block">
-                <img class="rounded img-fluid shadow-sm border" src="data:${mime};base64, ${result.data.image}" alt="User Image" style="max-width: 200px; height: auto;">
-                <div class="mt-2 text-center">
-                    <a href="data:${mime};base64, ${result.data.image}" download="BVN_Image_${result.data.idNumber}.${ext}" class="btn btn-sm btn-outline-primary w-100">
-                        <i class="bi bi-download"></i> Download Photo
-                    </a>
-                </div>
-            </div>
+                // Unhide the container and clear hidden class
+                validationInfo.classList.remove("hidden");
+                $(validationInfo).show();
+
+                validationInfo.innerHTML = `
+<div class="border border-light p-4 rounded bg-white shadow-sm">
+  <div class="row align-items-start">
+    <!-- Image Section -->
+    <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+      <div class="position-relative d-inline-block p-2 border rounded-3 bg-light">
+        <img class="img-fluid rounded shadow-sm" src="data:${mime};base64, ${result.data.image}" alt="User Image" style="max-width: 180px; height: auto;">
+        <div class="mt-3">
+           <a href="data:${mime};base64, ${result.data.image}" download="BVN_Image_${result.data.idNumber}.${ext}" class="btn btn-sm btn-primary w-100">
+              <i class="bi bi-download"></i> Download Photo
+           </a>
         </div>
-        <div class="col-12 col-md-8">
-            <div class="table-responsive">
-                <table class="table  table-sm ">
-                    <tbody>
-                        <tr>
-                            <th style="text-align: right;">BVN</th>
-                            <td style="text-align: left;">
-                                <span id="bvnno">${result.data.idNumber}</span>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th style="text-align: right;">First Name</th>
-                            <td style="text-align: left;">${result.data.firstName}</td>
-                        </tr>
-                        <tr>
-                            <th style="text-align: right;">Surname</th>
-                            <td style="text-align: left;">${result.data.lastName}</td>
-                        </tr>
-                        <tr>
-                            <th style="text-align: right;">Middle Name</th>
-                            <td style="text-align: left;">${result.data.middleName}</td>
-                        </tr>
-                        <tr>
-                            <th style="text-align: right;">Phone No</th>
-                            <td style="text-align: left;">${result.data.mobile}</td>
-                        </tr>
-                        <tr>
-                            <th style="text-align: right;">Gender</th>
-                            <td style="text-align: left;">${result.data.gender}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+      </div>
     </div>
+
+    <!-- Data Section -->
+    <div class="col-12 col-md-8">
+      <div class="ps-md-4">
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">BVN Number</div>
+          <div class="col-12 col-sm-7 fw-bold text-primary text-sm-end" id="bvnno">${result.data.idNumber}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">First Name</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.firstName}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Last Name</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.lastName}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Middle Name</div>
+          <div class="col-12 col-sm-7 fw-bold text-sm-end">${result.data.middleName ?? '—'}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Date of Birth</div>
+          <div class="col-12 col-sm-7 text-sm-end fw-semibold">${result.data.dateOfBirth}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Gender</div>
+          <div class="col-12 col-sm-7 text-sm-end"><span class="badge bg-light text-dark border">${result.data.gender}</span></div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Phone Number</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.mobile}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Enrollment Bank</div>
+          <div class="col-12 col-sm-7 text-sm-end">${result.data.enrollmentInstitution ?? result.data.enrollment_bank ?? '—'}</div>
+        </div>
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Enrollment Branch</div>
+          <div class="col-12 col-sm-7 text-sm-end text-truncate">${result.data.enrollmentBranch ?? result.data.enrollment_branch ?? '—'}</div>
+        </div>
+        ${result.data.nin ? `
+        <div class="row border-bottom py-2 g-0">
+          <div class="col-12 col-sm-5 text-muted fw-semibold">Linked NIN</div>
+          <div class="col-12 col-sm-7 text-sm-end fw-bold text-success">${result.data.nin}</div>
+        </div>
+        ` : ''}
+      </div>
+    </div>
+  </div>
 </div>
 `;
 
-            $("#download").removeClass("d-none"); // show
+                $("#download").removeClass("d-none"); // show
+            } else {
+                 $("#errorMsg").show();
+                 $("#message").html("Invalid Response from Server");
+                 setTimeout(function () {
+                     $("#errorMsg").fadeOut();
+                 }, 10000);
+            }
         },
         error: function (data) {
             $("#loader").hide();

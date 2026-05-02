@@ -151,27 +151,26 @@
                                                 Available!</p>
                                         @endif
                                     </div>
-
-                                      <!-- Modals -->
-                                    <div class="modal fade" id="reason" tabindex="-1" aria-labelledby="reason" data-bs-keyboard="true"
-                                    aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title" id="staticBackdropLabel2">Support Query</h6>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p id="message">No Message Yet.</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="reason" tabindex="-1" aria-labelledby="reason" data-bs-keyboard="true"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="staticBackdropLabel2">Support Query</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="message">No Message Yet.</p>
                 </div>
             </div>
         </div>
@@ -181,7 +180,7 @@
 <script>
     $(document).ready(function() {
         //Pay Modal
-        $('#reason').on('shown.bs.modal', function(event) {
+        $('#reason').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget)
             var reason = button.data('reason')
             if (reason != '')

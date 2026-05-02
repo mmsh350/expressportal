@@ -40,7 +40,7 @@
                         <div class="col-md-6 mb-4">
                             <div class="p-3 border rounded bg-light h-100">
                                 <h6 class="text-uppercase text-muted mb-3">Transaction Details</h6>
-                                <p><strong>Status:</strong> 
+                                <p><strong>Status:</strong>
                                     <span class="badge {{ $modification->status == 'Successful' ? 'bg-success' : ($modification->status == 'Failed' ? 'bg-danger' : 'bg-warning') }}">
                                         {{ $modification->status }}
                                     </span>
@@ -158,7 +158,7 @@
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
                                             <label class="form-label fw-bold">Update Status</label>
-                                            <select name="status" id="status" class="form-select" required>
+                                            <select name="status" id="status" class="form-select" style="color: #000" required>
                                                 <option value="Pending" {{ $modification->status == 'Pending' ? 'selected' : '' }}>Pending</option>
                                                 <option value="In-Progress" {{ $modification->status == 'In-Progress' ? 'selected' : '' }}>Processing</option>
                                                 <option value="Successful" {{ $modification->status == 'Successful' ? 'selected' : '' }}>Resolved</option>
@@ -170,8 +170,8 @@
                                             <label class="form-label fw-bold text-danger">Refund Amount (₦)</label>
                                             <div class="input-group">
                                                 <input type="number" name="refundAmount" id="refundAmount" class="form-control" step="0.01" placeholder="0.00">
-                                                <button type="button" class="btn btn-outline-danger" onclick="setRefund(100)">100%</button>
-                                                <button type="button" class="btn btn-outline-warning" onclick="setRefund(50)">50%</button>
+                                                <button type="button" class="btn btn-outline-dark" onclick="setRefund(100)">100%</button>
+                                                <button type="button" class="btn btn-outline-dark" onclick="setRefund(50)">50%</button>
                                             </div>
                                             <small class="text-muted">Paid: ₦{{ number_format($modification->transactions->amount ?? 0, 2) }}</small>
                                         </div>
@@ -200,7 +200,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script>
         const transactionAmount = {{ $modification->transactions->amount ?? 0 }};
-        
+
         function setRefund(pct) {
             document.getElementById('refundAmount').value = (transactionAmount * pct / 100).toFixed(2);
         }

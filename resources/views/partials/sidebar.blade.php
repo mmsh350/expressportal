@@ -156,6 +156,7 @@
             </a>
         </li>
 
+        {{-- 
         <li class="nav-item">
             <a class="nav-link {{ Route::is('user.personalize-nin') ? 'active' : '' }}"
                 href="{{ route('user.personalize-nin') }}">
@@ -163,6 +164,7 @@
                 <span class="menu-title">NIN Personalize</span>
             </a>
         </li>
+        --}}
 
         <li class="nav-item nav-category">System</li>
         <li class="nav-item">
@@ -263,6 +265,12 @@
                         <a class="nav-link {{ Route::is('admin.popup.index') ? 'active' : '' }}"
                             href="{{ route('admin.popup.index') }}">
                             <i class="mdi mdi-window-restore menu-icon"></i> Popup
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ Route::is('admin.combo-devices.index') ? 'active' : '' }}"
+                            href="{{ route('admin.combo-devices.index') }}">
+                            <i class="mdi mdi-cellphone-link menu-icon"></i> Combo Devices
                         </a>
                     </li>
                       <li class="nav-item">

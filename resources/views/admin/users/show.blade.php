@@ -36,15 +36,15 @@
                                                 @if ($user->profile_pic)
                                                     <img src="data:image/jpeg;base64,{{ $user->profile_pic }}"
                                                         class="rounded-circle shadow" alt="Profile Picture"
-                                                        style="width: 200px; height: 200px;">
+                                                        style="width: 150px; height: 150px; object-fit: cover;">
                                                 @else
                                                     @php
                                                         $initials = collect(explode(' ', $user->name))
                                                             ->map(fn($part) => strtoupper(substr($part, 0, 1)))
                                                             ->join('');
                                                     @endphp
-                                                    <div class="d-flex justify-content-center align-items-center rounded-circle shadow bg-secondary text-white mx-auto"
-                                                        style="width: 200px; height: 200px; font-size: 3rem;">
+                                                    <div class="d-flex justify-content-center align-items-center rounded-circle shadow bg-secondary text-white mx-auto overflow-hidden"
+                                                        style="width: 150px; height: 150px; font-size: 2.5rem; min-width: 150px; min-height: 150px;">
                                                         {{ $initials }}
                                                     </div>
                                                 @endif

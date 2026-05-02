@@ -504,7 +504,7 @@ class ServicesController extends Controller
                         'tag' => 'DELINK',
                     ]);
 
-                    return redirect()->back()->with('success', 'Self Service Delink request has been submitted , kindly check the status within 5 working days');
+                    return redirect()->back()->with('success', 'Self Service Delink request has been submitted');
                 } catch (\Exception $e) {
                     return redirect()->back()->with('error', 'An error occurred while making the API request');
                 }
@@ -620,7 +620,7 @@ class ServicesController extends Controller
                 ]);
             });
 
-            return redirect()->back()->with('success', 'Self Service Email Retrieval request has been submitted, kindly check the status within 5 working days');
+            return redirect()->back()->with('success', 'Self Service Email Retrieval request has been submitted');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'An error occurred while processing your request: ' . $e->getMessage());
         }
@@ -782,14 +782,6 @@ class ServicesController extends Controller
 
     public function requestNinModification(Request $request)
     {
-        $request->validate([
-            'service_code' => ['required', 'exists:services,service_code'],
-            'nin' => ['required', 'digits:11'],
-            'clear_picture' => ['nullable', 'image', 'max:2048'],
-            'email' => ['nullable', 'email'],
-            'password' => ['nullable', 'string'],
-        ]);
-
         $service = Service::where('service_code', $request->service_code)
             ->where('status', 'enabled')
             ->first();
@@ -799,6 +791,41 @@ class ServicesController extends Controller
         }
 
         $typeName = $service->name; // e.g. "DOB MOD"
+
+        // Dynamic Validation Rules based on Modification Type
+        $rules = [
+            'service_code'  => ['required', 'exists:services,service_code'],
+            'nin'           => ['required', 'digits:11'],
+            'clear_picture' => ['required', 'image', 'max:2048'], // Picture is mandatory
+            'email'         => ['nullable', 'email'],
+            'password'      => ['nullable', 'string'],
+        ];
+
+        // Apply type-specific rules
+        if ($typeName == 'DOB MOD') {
+            $rules['dob'] = ['required', 'date'];
+            $rules['phone_number'] = ['required', 'string'];
+        } elseif ($typeName == 'NAME MOD' || $typeName == 'PHONE NO MOD') {
+            $rules['surname'] = ['required', 'string', 'max:100'];
+            $rules['first_name'] = ['required', 'string', 'max:100'];
+            $rules['middle_name'] = ['nullable', 'string', 'max:100'];
+            $rules['phone_number'] = ['required', 'string'];
+        } elseif ($typeName == 'ADDRESS MOD') {
+            $rules['address'] = ['required', 'string'];
+            $rules['town'] = ['required', 'string', 'max:100'];
+            $rules['lga_origin'] = ['required', 'string', 'max:100'];
+            $rules['state_origin'] = ['required', 'string', 'max:100'];
+            $rules['lga_residence'] = ['required', 'string', 'max:100'];
+            $rules['state_residence'] = ['required', 'string', 'max:100'];
+        } elseif ($typeName == 'GENDER MOD') {
+            $rules['gender'] = ['required', 'in:Male,Female'];
+            $rules['phone_number'] = ['required', 'string'];
+        } elseif ($typeName == 'OTHER MOD') {
+            $rules['modification_type_detail'] = ['required', 'string', 'max:255'];
+            $rules['phone_number'] = ['required', 'string'];
+        }
+
+        $request->validate($rules);
 
         $wallet = Wallet::where('user_id', auth()->id())->first();
         if ($wallet->balance < $service->amount) {
@@ -906,7 +933,7 @@ class ServicesController extends Controller
         $modification->status = $request->status;
         $modification->reason = $request->comment;
 
-        if ($request->status === 'Failed') {
+        if ($request->status === 'Failed' && !$modification->refunded_at) {
             $modification->refunded_at = Carbon::now();
             $refundAmount = $request->refundAmount ?? 0;
 

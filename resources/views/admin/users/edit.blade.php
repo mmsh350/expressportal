@@ -21,25 +21,11 @@
                         </span>
                     </div>
                 </div>
-                @if (session('error'))
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        {{ session('error') }}
-                    </div>
-                @endif
-
-                @if ($errors->any())
-                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                </div>
+                @include('common.message')
                 <div class="row">
 
                     <div class="col-xxl-12 col-xl-12">
-                        @include('common.message')
                         <div class="card custom-card">
                             <div class="card-body">
                                 <form action="{{ route('admin.user.update', $user->id) }}" method="POST"
@@ -51,26 +37,18 @@
                                         <!-- Left Sidebar with Profile Image -->
                                         <div class="col-md-4 text-center">
                                             <div class="mb-3 mt-3">
-                                                {{-- @if ($user->profile_pic)
-                                                    <img src="data:image/jpeg;base64,{{ $user->profile_pic }}"
-                                                        class="rounded-circle shadow" alt="Profile Picture"
-                                                        style="width: 200px; height: 200px; object-fit: cover;">
-                                                @else
-                                                    <img src="https://via.placeholder.com/150" class="rounded-circle shadow"
-                                                        alt="No Image">
-                                                @endif --}}
                                                 @if ($user->profile_pic)
                                                     <img src="data:image/jpeg;base64,{{ $user->profile_pic }}"
                                                         class="rounded-circle shadow" alt="Profile Picture"
-                                                        style="width: 200px; height: 200px;">
+                                                        style="width: 150px; height: 150px; object-fit: cover;">
                                                 @else
                                                     @php
                                                         $initials = collect(explode(' ', $user->name))
                                                             ->map(fn($part) => strtoupper(substr($part, 0, 1)))
                                                             ->join('');
                                                     @endphp
-                                                    <div class="d-flex justify-content-center align-items-center rounded-circle shadow bg-secondary text-white mx-auto"
-                                                        style="width: 200px; height: 200px; font-size: 3rem;">
+                                                    <div class="d-flex justify-content-center align-items-center rounded-circle shadow bg-secondary text-white mx-auto overflow-hidden"
+                                                        style="width: 150px; height: 150px; font-size: 2.5rem; min-width: 150px; min-height: 150px;">
                                                         {{ $initials }}
                                                     </div>
                                                 @endif

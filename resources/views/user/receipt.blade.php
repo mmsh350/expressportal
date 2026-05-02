@@ -5,64 +5,47 @@
 
 @section('content')
 
-<div class="receipt-container" id="receipt">
-    <div class="receipt-header">
-        <i class="fas fa-check-circle"></i>
-        <h2>Transaction Receipt</h2>
-        <p>Transaction successfully processed</p>
+<div class="receipt-header">
+    <div class="brand-logo">
+        <i class="bi bi-shield-check"></i>
     </div>
-
-    <table class="table receipt-table">
-        <tbody>
-            <tr>
-                <th><i class="fas fa-receipt"></i> Reference No.</th>
-                <td>{{ strtoupper($transaction->referenceId) }}</td>
-            </tr>
-            <tr>
-                <th><i class="fas fa-tag"></i> Service Type</th>
-                <td>{{ strtoupper($transaction->service_type) }}</td>
-            </tr>
-            <tr>
-                <th><i class="fas fa-info-circle"></i> Description</th>
-                <td>{{ $transaction->service_description }}</td>
-            </tr>
-            <tr>
-                <th><i class="fas fa-money-bill"></i> Amount</th>
-                <td>₦{{ number_format($transaction->amount, 2) }}</td>
-            </tr>
-            <tr>
-                <th><i class="fas fa-check-circle"></i> Status</th>
-                <td class="status-approved">{{ strtoupper($transaction->status) }}</td>
-            </tr>
-            <tr>
-                <th><i class="fas fa-calendar-alt"></i> Date</th>
-                <td>{{ $transaction->created_at->format('F j, Y, g:i a') }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="total-amount">
-        <strong>Total: ₦{{ number_format($transaction->amount, 2) }}</strong>
+    <div class="status-badge">
+        <i class="bi bi-check-circle-fill"></i>
+        <span>Transaction Successful</span>
     </div>
+    <h2>Payment Receipt</h2>
+</div>
 
-    <div class="receipt-footer">
-        <p>Thank you for your business!</p>
+<div class="amount-display">
+    <div class="amount-label">Amount Paid</div>
+    <div class="amount-value">₦{{ number_format($transaction->amount, 2) }}</div>
+</div>
+
+<div class="info-grid">
+    <div class="info-row">
+        <div class="info-label">Reference Number</div>
+        <div class="info-value">{{ strtoupper($transaction->referenceId ?? $transaction->trx ?? 'N/A') }}</div>
     </div>
-
-    <div class="buttons-container">
-        <button class="btn btn-primary" onclick="printReceipt()">
-            <i class="fas fa-print"></i> Print
-        </button>
-        <button class="btn btn-secondary" id="shareButton">
-            <i class="fas fa-share"></i> Share
-        </button>
-         <button id="downloadButton" class="btn btn-success">
-        <i class="fas fa-download"></i> Download
-    </button>
+    <div class="info-row">
+        <div class="info-label">Service Type</div>
+        <div class="info-value">{{ strtoupper($transaction->service_type ?? 'N/A') }}</div>
+    </div>
+    <div class="info-row">
+        <div class="info-label">Description</div>
+        <div class="info-value">{{ $transaction->service_description ?? 'Transaction successful' }}</div>
+    </div>
+    <div class="info-row">
+        <div class="info-label">Date & Time</div>
+        <div class="info-value">{{ $transaction->created_at->format('M d, Y • g:i A') }}</div>
+    </div>
+    <div class="info-row">
+        <div class="info-label">Payment Status</div>
+        <div class="info-value" style="color: var(--success-color);">{{ strtoupper($transaction->status ?? 'SUCCESS') }}</div>
     </div>
 </div>
 
 @endsection
+
 
 
 

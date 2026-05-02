@@ -236,92 +236,69 @@
                 </div>
 
                 <!-- Modals -->
-                <div class="modal fade" id="reply" tabindex="-1" aria-labelledby="reply" data-bs-keyboard="true"
-                    data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h6 class="modal-title" id="staticBackdropLabel2">Reply Phone Search (#<span
-                                        id="sid"></span>)</h6>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
+
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal fade" id="reply" tabindex="-1" aria-labelledby="reply" data-bs-keyboard="true"
+        data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="staticBackdropLabel2">Reply Phone Search (#<span id="sid"></span>)</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" id="statusForm">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="status" class="form-label"><strong>Select Status</strong></label>
+                            <select name="status" id="status" class="form-select text-dark" required>
+                                <option value="" disabled selected>-- Choose Status --</option>
+                                <option value="resolved">Resolved</option>
+                                <option value="processing">Processing</option>
+                                <option value="rejected">Rejected</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 d-none" id="refundOption">
+                            <label class="form-label"><strong>Refund Options</strong></label>
+                            <div class="d-flex gap-3">
+                                <div class="form-check">
+                                    <input type="radio" name="refund_percentage" value="10" id="refund10" class="form-check-input refund-percentage ">
+                                    <label for="refund10" class="form-check-label">10%</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="refund_percentage" value="20" id="refund20" class="form-check-input refund-percentage">
+                                    <label for="refund20" class="form-check-label">20%</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="refund_percentage" value="30" id="refund30" class="form-check-input refund-percentage">
+                                    <label for="refund30" class="form-check-label">30%</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="refund_percentage" value="50" id="refund50" class="form-check-input refund-percentage">
+                                    <label for="refund50" class="form-check-label">50%</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="radio" name="refund_percentage" value="100" id="refund100" class="form-check-input refund-percentage">
+                                    <label for="refund100" class="form-check-label">100%</label>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                                <form method="POST" id="statusForm">
-                                    @csrf
-
-                                    <!-- Status Selection -->
-                                    <div class="mb-3">
-                                        <label for="status" class="form-label"><strong>Select
-                                                Status</strong></label>
-                                        <select name="status" id="status" class="form-select text-dark" required>
-                                            <option value="" disabled selected>-- Choose Status --
-                                            </option>
-                                            <option value="resolved">Resolved</option>
-                                            <option value="processing">Processing</option>
-                                            <option value="rejected">Rejected</option>
-                                        </select>
-                                    </div>
-
-                                    <!-- Refund Option -->
-                                    <div class="mb-3 d-none" id="refundOption">
-                                        <label class="form-label"><strong>Refund Options</strong></label>
-
-                                        <!-- Percentage Selection -->
-                                        <div class="d-flex gap-3">
-                                            <div class="form-check">
-                                                <input type="radio" name="refund_percentage" value="10"
-                                                    id="refund10" class="form-check-input refund-percentage ">
-                                                <label for="refund10" class="form-check-label">10%</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="radio" name="refund_percentage" value="20"
-                                                    id="refund20" class="form-check-input refund-percentage">
-                                                <label for="refund20" class="form-check-label">20%</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="radio" name="refund_percentage" value="30"
-                                                    id="refund30" class="form-check-input refund-percentage">
-                                                <label for="refund30" class="form-check-label">30%</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="radio" name="refund_percentage" value="50"
-                                                    id="refund50" class="form-check-input refund-percentage">
-                                                <label for="refund50" class="form-check-label">50%</label>
-                                            </div>
-                                            <div class="form-check">
-                                                <input type="radio" name="refund_percentage" value="100"
-                                                    id="refund100" class="form-check-input refund-percentage">
-                                                <label for="refund100" class="form-check-label">100%</label>
-                                            </div>
-                                        </div>
-
-                                        <!-- Calculated Refund Amount -->
-                                        <div class="mt-3">
-                                            <label for="refundAmount" class="form-label"><strong>Refund
-                                                    Amount
-                                                    (₦)</strong></label>
-                                            <input type="text" id="refundAmount" name="refundAmount"
-                                                class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <!-- Quill Editor Section -->
-                                    <div class="mb-3">
-                                        <label for="editor" class="form-label"><strong>Comment</strong></label>
-                                        <div id="editor" class="form-control"> </div>
-                                        <input type="hidden" name="comment" id="commentInput">
-                                        <input type="hidden" name="trxAmount" id="trxAmount">
-                                    </div>
-
-                                    <!-- Submit Button -->
-                                    <button type="submit" class="btn btn-primary w-100">Submit</button>
-                                </form>
+                            <div class="mt-3">
+                                <label for="refundAmount" class="form-label"><strong>Refund Amount (₦)</strong></label>
+                                <input type="text" id="refundAmount" name="refundAmount" class="form-control">
                             </div>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <label for="editor" class="form-label"><strong>Comment</strong></label>
+                            <div id="editor" class="form-control"> </div>
+                            <input type="hidden" name="comment" id="commentInput">
+                            <input type="hidden" name="trxAmount" id="trxAmount">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -430,7 +407,7 @@
             var requestId; // This will store the ID for later use
             var trxAmount;
 
-            $('#reply').on('shown.bs.modal', function(event) {
+            $('#reply').on('show.bs.modal', function(event) {
                 var button = $(event.relatedTarget);
                 requestId = button.data('id');
                 trxAmount = button.data('trxamount');
