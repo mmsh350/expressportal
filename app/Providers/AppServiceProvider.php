@@ -24,11 +24,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
-            if (!\Illuminate\Support\Facades\Schema::hasTable('site_settings')) {
-                $view->with('settings', null);
-                return;
-            }
-
             $settings = Cache::remember('site-settings', 3600, function () {
                 return SiteSetting::first();
             });
