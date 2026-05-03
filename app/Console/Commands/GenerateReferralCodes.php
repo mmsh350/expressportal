@@ -52,7 +52,6 @@ class GenerateReferralCodes extends Command
         foreach ($users as $user) {
             $code = $this->generateUniqueCode();
             $user->update(['referral_code' => $code]);
-            
             $results[] = [
                 'ID' => $user->id,
                 'Name' => $user->name,
