@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ config('app.name', 'Expressportal') }} - Premium Identity Verification</title>
+    <link rel="shortcut icon" href="{{ asset('assets/images/' . ($settings->favicon ?? 'default_favicon.png')) }}?v=2">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
