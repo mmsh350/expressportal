@@ -1059,7 +1059,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                 </div>
             </div>
             <div class="modal fade" id="kycModal" tabindex="-1" aria-labelledby="kycModal" data-bs-keyboard="true"
