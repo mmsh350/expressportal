@@ -9,7 +9,7 @@
     <meta name="author" content="{{ $settings->site_name ?? config('app.name') }}">
     <title>{{ $settings->site_name ?? config('app.name') }} - @yield('title') </title>
     
-    <link rel="icon" href="{{ asset('assets/images/' . ($settings->favicon ?? 'favicon.png')) }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('assets/images/' . ($settings->favicon ?? 'default_favicon.png')) }}" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     
