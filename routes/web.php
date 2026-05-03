@@ -162,6 +162,12 @@ Route::middleware(['auth', 'user.active'])->group(function () {
 
             //Whatsapp API Support--------------------------------------------------------------------------
             Route::get('/support', function () {
+                $settings = SiteSetting::first();
+
+                if ($settings && $settings->whatsapp_url) {
+                    return redirect()->away($settings->whatsapp_url);
+                }
+
                 return redirect()->away(config('services.whatsapp.api_url'));
             })->name('support');
         });
